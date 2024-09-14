@@ -176,13 +176,13 @@ def generate_video():
 def signup():
     if 'username' in request.json and 'email' in request.json and 'password' in request.json:
         current_user = CurrentUser(request.json['email'], request.json['password'], request.json['username'])
-        login_management = LoginManagement()
+        login_management = LoginManagement(current_user)
         result = login_management.signup()
         if result.success:
             mongo.db.user.insert_one({
                 'email': current_user.email,
                 'username': current_user.username,
-                'picture' : current_user.profile_picture
+                'picture': current_user.profile_picture
             })
         return result.get_response('Signup')
 

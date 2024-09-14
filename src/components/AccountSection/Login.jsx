@@ -1,32 +1,18 @@
-import React, { useState } from 'react';
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './login.css';
 import logo from '../../timeless-logo-no-words.png';
+import axios from "axios";
 
 const LoginForm = () => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { loginWithRedirect, isAuthenticated, isLoading, error } = useAuth0();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        loginWithRedirect({
-            login_hint: email
-        });
+        const response = await axios.post('http://10.37.117.49:5000/login', {'username': username, 'password': password});
+        console.log(response);
     };
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Oops... {error.message}</div>;
-    }
-
-    if (isAuthenticated) {
-        return <div>You are logged in!</div>;
-    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-300">
@@ -36,16 +22,16 @@ const LoginForm = () => {
                 <div className="form-bg default-shadow form-bg rounded-xl default-shadow w-96">
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="email-login">Email</label>
+                            <label htmlFor="username-login">Username</label>
                             <input
-                                type="email"
+                                type="username"
                                 className="form-control bg-white "
-                                id="email-login"
-                                name="email"
-                                placeholder="Enter email"
+                                id="username-login"
+                                name="username"
+                                placeholder="Enter username"
                                 required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
                         <div className="form-group">
@@ -65,7 +51,7 @@ const LoginForm = () => {
                             <button type="submit" className="btn btn-primary">Login</button>
                         </div>
                     </form>
-                    <Link to="/signup" className="link-primary hover:text-purple-900 text-purple-500">Don't have an account? Sign up</Link>
+                    <Link to="/signup" className="link-primary hover:text-purple-900 text-purple-500">Don&apos;t have an account? Sign up</Link>
                 </div>
             </div>
         </div>
@@ -74,15 +60,7 @@ const LoginForm = () => {
 
 const Login = () => {
     return (
-        <Auth0Provider
-            domain="dev-uepv8601rzfynqzi.us.auth0.com"
-            clientId="O4c53QdJ9k3kjdTM6D8yYkTzKeOe6LNi"
-            authorizationParams={{
-                redirect_uri: window.location.origin
-            }}
-        >
-            <LoginForm />
-        </Auth0Provider>
+        <LoginForm />
     );
 };
 
