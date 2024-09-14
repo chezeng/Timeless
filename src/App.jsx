@@ -8,6 +8,7 @@ import Community from './components/CommunitySection/Community';
 import VideoDisplay from './components/VideoDisplay';
 import Login from './components/AccountSection/Login';
 import Signup from './components/AccountSection/Signup';
+import Profile from './components/AccountSection/Profile';
 
 const App = () => {
 
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/videodisplay" element={<VideoDisplay />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
     </Router>
   );

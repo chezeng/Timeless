@@ -1,9 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import './community.css';
 
 const Community = () => {
-  <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-300">
-      
-  </div>
+  return (
+    <div className="community-container min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
+      <div className="gallery">
+        <div className="box big">Big Box 1</div>
+        <div className="box small">Small Box 1</div>
+        <div className="box small">Small Box 2</div>
+        <div className="box big">Big Box 2</div>
+        <div className="box small">Small Box 3</div>
+        <div className="box small">Small Box 4</div>
+      </div>
+    </div>
+  );
 };
+
 export default Community;

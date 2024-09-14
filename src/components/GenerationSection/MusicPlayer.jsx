@@ -3,7 +3,7 @@ import { Play, Pause } from 'lucide-react';
 
 const MusicPlayer = ({ musicData }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const audioRef = useRef('/assets/Color.mp3');
 
   useEffect(() => {
     if (musicData && audioRef.current) {
@@ -29,8 +29,8 @@ const MusicPlayer = ({ musicData }) => {
   const handleTimeUpdate = () => {
     const currentTime = audioRef.current.currentTime || 0;
     const duration = audioRef.current.duration || 0;
-    const progressPercent = (currentTime / duration) * 100;
-    document.querySelector('.progress-bar-fill').style.width = `${progressPercent}%`;
+    document.querySelector('.current-time').textContent = formatTime(currentTime);
+    document.querySelector('.music_progress_line').style.width = `${(currentTime / duration) * 100}%`;
   };
 
   const handleEnded = () => {
@@ -52,15 +52,15 @@ const MusicPlayer = ({ musicData }) => {
         <div className="progress-bar-fill bg-purple-500 h-full w-0 transition-all duration-300 ease-in-out"></div>
       </div>
       <div className="flex justify-between text-sm text-purple-700 mb-4">
-        <span>{formatTime(audioRef.current?.currentTime || 0)}</span>
-        <span>{formatTime(audioRef.current?.duration || 0)}</span>
+        <span className="current-time">00:00</span>
+        <span className="time">{formatTime(audioRef.current?.duration || 0)}</span>
       </div>
       <button 
         className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition duration-300 ease-in-out mx-auto"
         onClick={handlePlayPause}
       >
         {isPlaying ? (
-          <Pause className="text-purple-600" size={24} />
+          <Pause className="text-purple-600 " size={24} />
         ) : (
           <Play className="text-purple-600" size={24} />
         )}
