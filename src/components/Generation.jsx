@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import NavBar from './NavBar'
 
 const Generation = () => {
-  const [currentPage, setCurrentPage] = useState('Home');
   const [thoughts, setThoughts] = useState('');
 
   const handlePageChange = (page) => {
@@ -11,8 +9,7 @@ const Generation = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
-      <NavBar currentPage={currentPage} onPageChange={handlePageChange} />
-      
+
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-1/2">
