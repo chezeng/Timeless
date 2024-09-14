@@ -18,6 +18,12 @@ app.config["MONGO_URI"] = "mongodb+srv://{}:{}@{}/Timeless?retryWrites=true&w=ma
 mongo = PyMongo(app)
 
 
+def verify_token(token: str):
+    if not token:
+        return Result.failure(401, 'Token is missing')
+    return Result.success('Token is valid')
+
+
 @app.route('/')
 def api_greeting():
     return Result.success('The Timeless API is online!').get_response('API Ping')
@@ -25,6 +31,9 @@ def api_greeting():
 
 @app.route('/generate_image', methods=['POST'])
 def generate_image():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Image Generation')
     if 'prompt' in request.json:
         image_prompt = request.json['prompt']
     else:
