@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause } from 'lucide-react';
+import axios from 'axios';
 
 const MusicPlayer = () => {
   const [musicList, setMusicList] = useState([]);
@@ -7,14 +8,14 @@ const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
-  useEffect(() => {
-    fetch('http://10.37.117.49:5000/music')
-      .then((response) => response.json())
-      .then((data) => {
-        setMusicList(data);
-        render(data[0]);
-      });
-  }, []);
+  // useEffect(() => {
+  //   const response = await axios.get(`http://10.37.117.49:5000/music}`);
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setMusicList(data);
+  //       render(data[0]);
+  //     });
+  // }, []);
 
   const render = (data) => {
     if (audioRef.current) {

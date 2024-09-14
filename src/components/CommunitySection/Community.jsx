@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import '../community.css';
+import './community.css';
 
 const Community = () => {
   const [items, setItems] = useState([]);
