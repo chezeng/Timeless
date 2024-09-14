@@ -175,30 +175,30 @@ def generate_video():
 @app.route('/signup', methods=['POST'])
 def signup():
     if 'username' in request.json and 'email' in request.json and 'password' in request.json:
-        current_user = CurrentUser(request.json['email'], request.json['password'], request.json['username'])
-        login_management = LoginManagement(current_user)
-        result = login_management.signup()
-        if result.success:
-            mongo.db.user.insert_one({
-                'email': current_user.email,
-                'username': current_user.username,
-                'picture': current_user.profile_picture,
-                'password': current_user.password
-            })
-        return result.get_response('Signup')
+        mongo.db.user.insert_one({
+            'email': request.json.get('email'),
+            'username': request.json.get('username'),
+            'picture': 'https://static.vecteezy.com/system/resources/previews/033/882/148/original/transparent-background-person-icon-free-png.png',
+            'password': request.json.get('password')
+        })
+        return Result.success('User signed up successfully').get_response('User Profile')
+
 
 @app.route('/login', methods=['POST'])
 def login():
     if 'username' in request.json and 'password' in request.json:
         result = mongo.db.user.find_one({
-            'user_id' : request.headers.get('username'),
-            'password' : request.headers.get('password')
+            'username': request.json.get('username'),
+            'password': request.json.get('password')
         })
-        if (not result):
-            return Result.failure(result.status_code, result.text).get_response('User Profile')
-        return result.json()
-
-
+        print(result)
+        if not result:
+            return Result.failure(404, 'Username and password does not match').get_response('Login')
+        return Result.success({
+            'userId': str(result.get('_id')),
+            'username': result.get('username'),
+            'email': result.get('email'),
+        }).get_response('Login')
 
 
 @app.route('/community_feed', methods=['GET'])

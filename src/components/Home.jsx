@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import AOS from 'aos';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 
 const HomePage = () => {
@@ -38,9 +37,10 @@ const HomePage = () => {
 
   const checkLoginStatus = async () => {
     // Replace this with your actual API call
-    const response = await fetch('/api/check-login');
-    const data = await response.json();
-    setIsLoggedIn(data.isLoggedIn);
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      setIsLoggedIn(true);
+    }
   };
 
   const handleDreamClick = () => {

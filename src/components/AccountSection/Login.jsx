@@ -1,17 +1,48 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import './login.css';
 import logo from '../../timeless-logo-no-words.png';
-import axios from "axios";
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate(); // Create a navigate instance
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        const response = await axios.post('http://10.37.117.49:5000/login', {'username': username, 'password': password});
-        console.log(response);
+
+        // Create the payload
+        const payload = {
+            username: username,
+            password: password
+        };
+
+        try {
+            // Send the POST request to Flask API
+            const response = await fetch('http://10.37.117.49:5000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload), // Send the payload as JSON
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Login successful:', data);
+
+                localStorage.setItem('userId', data.userId);
+
+                // Redirect to /home after signup success
+                navigate('/');
+                window.location.reload();
+            } else {
+                const errorData = await response.json();
+                console.error('Login failed:', errorData);
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
     };
 
     return (

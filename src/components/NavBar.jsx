@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import {Button} from "@mui/material";
 
 const Navbar = () => {
   const location = useLocation();
@@ -30,8 +31,8 @@ const Navbar = () => {
   useEffect(() => {
     // Replace this with your actual authentication check
     const checkLoginStatus = () => {
-      const token = localStorage.getItem('authToken');
-      setIsLoggedIn(!!token);
+      const userId = localStorage.getItem('userId');
+      setIsLoggedIn(!!userId);
     };
 
     checkLoginStatus();
@@ -69,6 +70,7 @@ const Navbar = () => {
         {/* Authentication Section */}
         <div className="flex items-center space-x-2">
           {isLoggedIn ? (
+              <>
             <Link 
               to="/profile"
               className="flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 hover:shadow-lg"
@@ -76,6 +78,10 @@ const Navbar = () => {
               <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
               <span>Profile</span>
             </Link>
+              <Button
+                  className="px-4 py-2 rounded-md text-sm font-medium text-purple-600 border border-purple-600 hover:bg-purple-50 transition-all transform hover:-translate-y-0.5"
+                  onClick={() => {localStorage.clear(); window.location.reload();}}>Logout</Button>
+                </>
           ) : (
             <>
               <Link 
