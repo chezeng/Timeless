@@ -6,6 +6,8 @@ import Generation from './components/GenerationSection/Generation';
 import Portfolio from './components/PortfolioSection/Portfolio';
 import Community from './components/CommunitySection/Community';
 import VideoDisplay from './components/VideoDisplay';
+import Login from './components/AccountSection/Login';
+import Signup from './components/AccountSection/Signup';
 
 const App = () => {
 
@@ -18,6 +20,8 @@ const App = () => {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/community" element={<Community />} />
           <Route path="/videodisplay" element={<VideoDisplay />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
     </Router>
   );
