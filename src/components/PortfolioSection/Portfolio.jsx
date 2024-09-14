@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from "react";
 import './portfolio.css'; 
 import PortfolioItem from './PortfolioItem'; 
-import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Video, Heart, Share2 } from 'lucide-react';
 
 const Portfolio = () => {
   const [items, setItems] = useState([]);
   const [activeSection, setActiveSection] = useState("video");
-  const { section } = useParams();
 
-  useEffect(() => {
-    if (section) {
-      setActiveSection(section);
-    }
-    fetchItems();
-  }, [section]);
-  
   const fetchItems = async () => {
     try {
       const response = await axios.get(`http://your-mongodb-atlas-api-url/${activeSection}`);
@@ -67,25 +58,19 @@ const Portfolio = () => {
           <button className={`subsection-nav-button text-white  transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0
           ${activeSection === "video" ? "active" : ""}`}
             onClick={() => setActiveSection("video")}>
-              <Link to="/portfolio">
-                <Video />
-              </Link>
+              <Video />
             </button>
             
           <button className={`subsection-nav-button text-white transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0
           ${activeSection === "liked" ? "active" : ""}`}
               onClick={() => setActiveSection("liked")}>
-              <Link to="/portfolio/liked">
                 <Heart />
-              </Link>
           </button>
 
           <button
             className={`subsection-nav-button text-white transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0}`}
             onClick={() => setActiveSection("shared")}>
-              <Link to="/portfolio/shared">
                 <Share2 />
-              </Link>
           </button>
         </nav>
 
