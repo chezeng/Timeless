@@ -1,6 +1,6 @@
 import configparser
 
-config = configparser.ConfigParser()
+config = configparser.ConfigParser(interpolation=None)
 config.read('config.ini')
 
 
@@ -9,3 +9,4 @@ class API(object):
         self.OPENAI_API_KEY = config['keys']['OPENAI_API_KEY']
         self.COHERE_API_KEY = config['keys']['COHERE_API_KEY']
         self.GROQ_API_KEY = config['keys']['GROQ_API_KEY']
+        self.SUNO_COOKIE = config['keys']['SUNO_COOKIE']
