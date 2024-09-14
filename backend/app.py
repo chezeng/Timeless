@@ -179,6 +179,11 @@ def generate_video():
 @app.route('/signup', methods=['POST'])
 def signup():
     if 'username' in request.json and 'email' in request.json and 'password' in request.json:
+        result = mongo.db.user.find_one({
+            'username' : request.json.get('username')
+        })
+        if result:
+            return Result.failure(404, 'Username already exists').get_response('Login')
         mongo.db.user.insert_one({
             'email': request.json.get('email'),
             'username': request.json.get('username'),
