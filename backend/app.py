@@ -137,8 +137,8 @@ def communityfeed():
     })
     result2 = mongo.db.image.find({
         'location': topLocation
-    })
-    result3 = result1 + result2
+    })gi
+    result3 = result1.toArray() + result2.toArray()
     result3 = list(set(result3))
     return result3
     
