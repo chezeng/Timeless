@@ -1,12 +1,21 @@
 from flask import Flask, request
-
+from flask_pymongo import PyMongo
 from Groq import GroqAPI
+from login import LoginManagement
 from result import Result
 from Cohere import Cohere
 from OpenAI import DallE3
 from Suno import Suno
+import configparser
+
+from user import CurrentUser
 
 app = Flask(__name__)
+config = configparser.ConfigParser(interpolation=None)
+config.read('config.ini')
+app.config["MONGO_URI"] = "mongodb+srv://{}:{}@{}/Timeless?retryWrites=true&w=majority&appName=Timeless".format(
+    config['DATABASE']['username'], config['DATABASE']['password'], config['DATABASE']['host'])
+mongo = PyMongo(app)
 
 
 @app.route('/')
@@ -40,3 +49,17 @@ def generate_audio():
     audio_prompt = GroqAPI().generate_audio_prompt(prompt)
     audio = Suno().generate_audio(audio_prompt)
     return Result.success(audio).get_response('Audio Generation')
+
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    if 'username' in request.json and 'email' in request.json and 'password' in request.json:
+        current_user = CurrentUser(request.json['email'], request.json['password'], request.json['username'])
+        login_management = LoginManagement(current_user)
+        result = login_management.signup()
+        if result.success:
+            mongo.db.user.insert_one({
+                'email': current_user.email,
+                'username': current_user.username,
+            })
+        return result.get_response('Signup')
