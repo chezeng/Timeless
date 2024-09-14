@@ -134,14 +134,14 @@ def generate_audio():
         'user_id': request.headers.get('token'),
         'location': location,
         'time': time,
-        'url': audios[0].get('audio_url')
+        'url': audios[0].get('audioUrl')
     })
 
     mongo.db.audio.insert_one({
         'user_id': request.headers.get('token'),
         'location': location,
         'time': time,
-        'url': audios[1].get('audio_url')
+        'url': audios[1].get('audioUrl')
     })
 
     return Result.success(audios).get_response('Audio Generation')
@@ -153,8 +153,8 @@ def generate_video():
         prompt = request.json['prompt']
     else:
         return Result.failure(400, 'Prompt is missing').get_response('Video Generation')
-    if 'image_url' in request.json:
-        image_url = request.json['image_url']
+    if 'imageUrl' in request.json:
+        image_url = request.json['imageUrl']
     else:
         return Result.failure(400, 'Image URL is missing').get_response('Video Generation')
 
@@ -184,31 +184,41 @@ def signup():
         return result.get_response('Signup')
 
 
-@app.route('/communityfeed', methods=['GET'])
-def communityfeed():
-    user_id = request.headers['userId']
-    result = mongo.db.time_count.find_one({
-        'userid': user_id
+@app.route('/community_feed', methods=['GET'])
+def fetch_community_feed():
+    user_id = request.headers['token']
+    result = mongo.db.time_count.find({
+        'user_id': user_id
     }, sort=[('count', 1)])
     if not result:
-        top_time = "1980"
+        top_time = []
     else:
-        top_time = result[0].get('time')
+        top_time = [item.get('time') for item in list(result)[:3]]
 
-    result = mongo.db.location_count.find_one({
-        'userid': user_id
+    result = mongo.db.location_count.find({
+        'user_id': user_id
     }, sort=[('count', 1)])
     if not result:
-        top_location = "NewYork"
+        top_location = []
     else:
-        top_location = result[0].get('location')
+        top_location = [item.get('location') for item in list(result)[:3]]
 
-    result1 = mongo.db.image.find({
-        'time': top_time
-    })
-    result2 = mongo.db.image.find({
-        'location': top_location
-    })
-    result3 = result1.toArray() + result2.toArray()
-    result3 = list(set(result3))
-    return result3
+    feed = []
+
+    for time in top_time:
+        top_time_result = mongo.db.image.find({
+            'time': time
+        })
+        for item in top_time_result:
+            if item.get('url') not in feed:
+                feed.append(item.get('url'))
+
+    for location in top_location:
+        top_location_result = mongo.db.image.find({
+            'location': location
+        })
+        for item in top_location_result:
+            if item.get('url') not in feed:
+                feed.append(item.get('url'))
+
+    return Result.success(feed).get_response('Fetch Community Feed')
