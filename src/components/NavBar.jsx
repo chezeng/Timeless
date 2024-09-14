@@ -1,18 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const location = useLocation();
-  const navItems = ['Home', 'Portfolio', 'Community'];
+  const navItems = ['Home', 'Generation', 'Portfolio', 'Community', 'Account'];
+  const [visible, setVisible] = useState(true);
+  const [y, setY] = useState(window.scrollY);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Simulating login state
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY < y) {
+        setVisible(true);
+      } else if (currentScrollY > 100) { // Only hide navbar after scrolling down 100px
+        setVisible(false);
+      }
+      setY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [y]);
+
+  // Simulating a login check
+  useEffect(() => {
+    // Replace this with your actual authentication check
+    const checkLoginStatus = () => {
+      const token = localStorage.getItem('authToken');
+      setIsLoggedIn(!!token);
+    };
+
+    checkLoginStatus();
+  }, []);
 
   return (
-    <nav className="shadow-md py-4 bg-white">
+    <nav className={`fixed z-10 w-full shadow-md py-4 bg-white transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2 group">
           <img src="/src/assets/logo.png" alt="Timeless logo" className="w-8 h-8" />
-          <p className="text-2xl font-bold italic text-purple-600 group-hover:text-purple-700 transition-colors duration-300">Timeless</p>
+          <p className="text-2xl font-bold text-purple-600 group-hover:text-purple-700 transition-colors duration-300">Timeless</p>
         </Link>
-        <div className="flex ">
+        <div className="flex">
           {navItems.map((item) => {
             const isActive = 
               (item === 'Home' && location.pathname === '/') || 
@@ -29,20 +61,37 @@ const Navbar = () => {
                 `}
               >
                 {item}
-                <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-purple-600 transform transition-transform duration-300 ease-in-out
-                  ${isActive ? 'translate-x-0' : '-translate-x-full'}`}>
-                </span>
               </Link>
             );
           })}
         </div>
 
-        {/* Profile Section */}
+        {/* Authentication Section */}
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gray-300 rounded-full transition-transform duration-300 hover:scale-110"></div>
-          <button className="px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-            View Profile
-          </button>
+          {isLoggedIn ? (
+            <Link 
+              to="/profile"
+              className="flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+              <span>Profile</span>
+            </Link>
+          ) : (
+            <>
+              <Link 
+                to="/login"
+                className="px-4 py-2 rounded-md text-sm font-medium text-purple-600 border border-purple-600 hover:bg-purple-50 transition-all duration-300 ease-in-out"
+              >
+                Login
+              </Link>
+              <Link 
+                to="/register"
+                className="px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
+              >
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
