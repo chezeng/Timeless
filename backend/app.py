@@ -253,3 +253,13 @@ def get_user_profile():
     if response.status_code == 200:
         return Result.success(response.json()).get_response('User Profile')
     return Result.failure(response.status_code, response.text).get_response('User Profile')
+
+@app.route('/portfolio_images', methods=['GET'])
+def get_user_portfolio():
+    token = request.headers['username']
+    images = []
+    result = mongo.db.image.find({
+        'user_id': token
+    })
+    for item in result:
+        images.append(item.get('url'))
