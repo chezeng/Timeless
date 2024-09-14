@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Camera } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -10,10 +9,10 @@ const Navbar = () => {
     <nav className="shadow-md py-4 bg-white">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2 group">
-          <Camera className="text-purple-600 group-hover:text-purple-700 transition-colors duration-300" size={24} />
-          <p className="text-2xl font-bold text-purple-600 group-hover:text-purple-700 transition-colors duration-300">Timeless</p>
+          <img src="/src/assets/logo.png" alt="Timeless logo" className="w-8 h-8" />
+          <p className="text-2xl font-bold italic text-purple-600 group-hover:text-purple-700 transition-colors duration-300">Timeless</p>
         </Link>
-        <div className="flex space-x-4">
+        <div className="flex ">
           {navItems.map((item) => {
             const isActive = 
               (item === 'Home' && location.pathname === '/') || 
@@ -27,7 +26,6 @@ const Navbar = () => {
                     ? 'text-purple-600 font-bold border-b-2 border-purple-600' 
                     : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
                   }
-                  relative overflow-hidden
                 `}
               >
                 {item}

@@ -16,8 +16,7 @@ const HomePage = () => {
         <p className="text-lg text-gray-700 mb-4">Which moment would you like today?</p>
         <button
           className="px-8 py-3 bg-purple-600 text-white rounded-full text-lg font-medium hover:bg-purple-700 transition duration-300 ease-in-out transform hover:-translate-y-1 active:translate-y-0"
-          onClick={handleDream}
-        >
+          onClick={handleDream}>
           Let's Dream!
         </button>
       </main>
