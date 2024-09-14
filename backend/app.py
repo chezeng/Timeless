@@ -272,3 +272,19 @@ def get_user_portfolio():
     })
     for item in result:
         images.append(item.get('url'))
+
+@app.route('/user_email', methods=['GET'])
+def get_user_email():
+    token = request.headers['username']
+    result = mongo.db.users.find_one({
+        'user_id' : token
+    })
+    return result.get('email')
+
+@app.route('/user_password', methods=['GET'])
+def get_user_password():
+    token = request.headers['username']
+    result = mongo.db.users.find_one({
+        'user_id' : token
+    })
+    return result.get('password')
