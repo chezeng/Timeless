@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../portfolio.css'; // Assuming you have some CSS styles
+import './portfolio.css'; // Assuming you have some CSS styles
 import PortfolioItem from './PortfolioItem'; // Import the new PortfolioItem component
 
 const Portfolio = () => {

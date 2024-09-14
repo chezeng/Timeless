@@ -9,7 +9,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 flex flex-col">
+    <div className="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 flex flex-col py-56">
       <main className="flex-grow flex flex-col items-center justify-center px-4 text-center">
         <h1 className="text-5xl font-bold text-purple-600 mb-2">Timeless</h1>
         <p className="text-xl text-gray-600 mb-8">Relive the moments, Feel the Era</p>

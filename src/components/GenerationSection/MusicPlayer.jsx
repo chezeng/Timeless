@@ -8,7 +8,7 @@ const MusicPlayer = () => {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/music')
+    fetch('http://10.37.117.49:5000/music')
       .then((response) => response.json())
       .then((data) => {
         setMusicList(data);
