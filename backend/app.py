@@ -265,7 +265,7 @@ def get_user_profile():
 
 @app.route('/portfolio_images', methods=['GET'])
 def get_user_portfolio():
-    token = request.headers['username']
+    token = request.headers['token']
     images = []
     result = mongo.db.image.find({
         'user_id': token
@@ -275,7 +275,7 @@ def get_user_portfolio():
 
 @app.route('/user_email', methods=['GET'])
 def get_user_email():
-    token = request.headers['username']
+    token = request.headers['token']
     result = mongo.db.users.find_one({
         'user_id' : token
     })
@@ -283,8 +283,9 @@ def get_user_email():
 
 @app.route('/user_password', methods=['GET'])
 def get_user_password():
-    token = request.headers['username']
+    token = request.headers['token']
     result = mongo.db.users.find_one({
         'user_id' : token
     })
     return result.get('password')
+
