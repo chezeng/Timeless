@@ -3,13 +3,14 @@ import ImageGrid from './ImageGrid';
 import MusicPlayer from './MusicPlayer';
 import ThoughtInput from './ThoughtInput';
 import ActionButtons from './ActionButtons';
+import axios from 'axios';
+import config from '../../apiConfig.json'; // Assuming base_url and token are stored here
 
 const Generation = () => {
   const [images, setImages] = useState([]);
   const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
   const [musicData, setMusicData] = useState(null); // State for music data
-  const [thoughts, setThoughts] = useState('');
 
   const generateImages = async () => {
     if (!time || !location) {
@@ -20,8 +21,8 @@ const Generation = () => {
     try {
       const imageRequests = [...Array(4)].map(async () => {
         const response = await axios.post(`${config.base_url}/generate_image`, {
-          time: time,
-          location: location,
+          time,
+          location
         }, {
           headers: {
             token: config.token
@@ -75,13 +76,13 @@ const Generation = () => {
     <div className="p-10 md:h-screen h-full pt-24">
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/3">
-          <MusicPlayer />
+          <MusicPlayer musicData={musicData} /> {/* Pass music data */}
         </div>
         <div className="w-full md:w-2/3">
-          <ImageGrid />
+          <ImageGrid images={images} />
           <div className="mt-8 flex flex-row">
-            <ThoughtInput thoughts={thoughts} setThoughts={setThoughts} />
-            <ActionButtons />
+            <ThoughtInput setTime={setTime} setLocation={setLocation} setImages={setImages} />
+            <ActionButtons generateImages={generateImages} showMusic={generateMusic} /> {/* Pass music generation function */}
           </div>
         </div>
       </div>
