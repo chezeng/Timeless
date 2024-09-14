@@ -1,6 +1,5 @@
 from typing import Generic, TypeVar
 
-
 T = TypeVar('T')
 
 
@@ -22,13 +21,17 @@ class Result(Generic[T]):
     def get_response(self, request_name: str) -> tuple[dict, int]:
         if self.success:
             if self.data is None:
-                return {
+                response = {
                     'ok': True,
                     'message': '{} Succeeded'.format(request_name),
                 }, 200
-            return {
-                'ok': True,
-                'message': '{} Succeeded'.format(request_name),
-                'data': self.data,
-            }, 200
-        return {'ok': False, 'message': '{} Failed - {}'.format(request_name, self.reason)}, self.code
+            else:
+                response = {
+                    'ok': True,
+                    'message': '{} Succeeded'.format(request_name),
+                    'data': self.data,
+                }, 200
+        else:
+            response = {'ok': False, 'message': '{} Failed - {}'.format(request_name, self.reason)}, self.code
+        print('[Timeless] Response Returned:', response)
+        return response
