@@ -15,9 +15,9 @@ const Generation = () => {
         </div>
         <div className="w-full md:w-2/3">
           <ImageGrid />
-          <div className="mt-8">
+          <div className="mt-8 grid grid-cols-2">
             <ThoughtInput thoughts={thoughts} setThoughts={setThoughts} />
-            <ActionButtons />
+            <ActionButtons className=''/>
           </div>
         </div>
       </div>
