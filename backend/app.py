@@ -38,9 +38,9 @@ def api_greeting():
 
 @app.route('/generate_image', methods=['POST'])
 def generate_image():
-    token_verification = verify_token(request.headers.get('token'))
-    if not token_verification.success:
-        return token_verification.get_response('Image Generation')
+    #token_verification = verify_token(request.headers.get('token'))
+    #if not token_verification.success:
+    #    return token_verification.get_response('Image Generation')
     if 'location' in request.json:
         location = request.json['location']
     else:
@@ -53,6 +53,10 @@ def generate_image():
         description = request.json['description']
     else:
         description = ''
+    if 'token' in request.json:
+        username = request.json['token']
+    else:
+        return Result.failure(400, 'Creator is missing').get_response('Image Generation')
     image_prompt = 'Location: ' + location + ', Time: ' + time
     if description:
         image_prompt += ', Description: ' + description
@@ -63,41 +67,41 @@ def generate_image():
     image_url = DallE3().generate_image(elaborated_image_prompt)
 
     mongo.db.image.insert_one({
-        'user_id': request.headers.get('token'),
+        'user_id': username,
         'location': location,
         'time': time,
         'url': image_url
     })
 
     result = mongo.db.time_count.find_one({
-        'user_id': request.headers.get('token'),
+        'user_id': username,
         'time': time
     })
     if not result:
         mongo.db.time_count.insert_one({
-            'user_id': request.headers.get('token'),
+            'user_id': username,
             'time': time,
             'count': 1
         })
     else:
         mongo.db.time_count.update_one({
-            'user_id': request.headers.get('token'),
+            'user_id': username,
             'time': time
         }, {'$set': {'count': 1 + result.get('count')}})
 
     result = mongo.db.location_count.find_one({
-        'user_id': request.headers.get('token'),
+        'user_id': username,
         'location': location
     })
     if not result:
         mongo.db.location_count.insert_one({
-            'user_id': request.headers.get('token'),
+            'user_id': username,
             'location': location,
             'count': 1
         })
     else:
         mongo.db.location_count.update_one({
-            'user_id': request.headers.get('token'),
+            'user_id': username,
             'location': location
         }, {'$set': {'count': 1 + result.get('count')}})
 
