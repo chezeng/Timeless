@@ -13,6 +13,7 @@ class Cohere(API):
         }
 
     def elaborate_image_prompt(self, image_prompt: str) -> str:
+        print('[Cohere] I am cooking the image prompt...')
         fixed_prompt = ('Act as a professional artist and writer, creating detailed AI-prompt descriptions in various '
                         'art styles. Use full imagination to expand the following description into vivid, '
                         'immersive and realistic scenes. Example: change the description “1980s New York Street Dusk” '
@@ -23,4 +24,5 @@ class Cohere(API):
         response = requests.post(url=self.url, headers=self.headers, json={
             'message': fixed_prompt + image_prompt
         })
+        print('[Cohere] Yo I am done cooking')
         return response.json().get('text')

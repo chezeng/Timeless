@@ -10,3 +10,4 @@ class API(object):
         self.COHERE_API_KEY = config['keys']['COHERE_API_KEY']
         self.GROQ_API_KEY = config['keys']['GROQ_API_KEY']
         self.SUNO_COOKIE = config['keys']['SUNO_COOKIE']
+        self.BLTCY_API_KEY = config['keys']['BLTCY_API_KEY']

@@ -9,6 +9,7 @@ class DallE3(API):
 
     def generate_image(self, image_prompt: str) -> str:
         fixed_prompt = 'high quality and realistic image based on the following description:'
+        print('[DallE3] I am cooking the images...')
         response = self.client.images.generate(
             model="dall-e-3",
             prompt=fixed_prompt + image_prompt,
@@ -16,5 +17,6 @@ class DallE3(API):
             quality="standard",
             n=1,
         )
+        print('[DallE3] Yo I am done cooking')
         image_url = response.data[0].url
         return image_url
