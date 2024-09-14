@@ -10,6 +10,8 @@ from OpenAI import DallE3
 from Suno import Suno
 from flask_cors import CORS, cross_origin
 import configparser
+import requests
+
 
 from user import CurrentUser
 
@@ -174,12 +176,13 @@ def generate_video():
 def signup():
     if 'username' in request.json and 'email' in request.json and 'password' in request.json:
         current_user = CurrentUser(request.json['email'], request.json['password'], request.json['username'])
-        login_management = LoginManagement(current_user)
+        login_management = LoginManagement()
         result = login_management.signup()
         if result.success:
             mongo.db.user.insert_one({
                 'email': current_user.email,
                 'username': current_user.username,
+                'picture' : current_user.profile_picture
             })
         return result.get_response('Signup')
 
@@ -222,3 +225,14 @@ def fetch_community_feed():
                 feed.append(item.get('url'))
 
     return Result.success(feed).get_response('Fetch Community Feed')
+
+@app.route('/userprofile', methods=['GET'])
+def searchProfile():
+    token = request.headers['token']
+    response = requests.post(
+        url="https://dev-uepv8601rzfynqzi.us.auth0.com/userinfo",
+        params={
+            "access_token": token
+        }
+    )
+    print(response)
