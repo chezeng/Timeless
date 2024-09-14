@@ -8,8 +8,8 @@ const Generation = () => {
   const [thoughts, setThoughts] = useState('');
 
   return (
-    <div className="container mx-auto py-10 h-full md:h-screen">
-      <div className="flex flex-col md:flex-row gap-8 mx-3 md:mx-3">
+    <div className="p-10 md:h-screen h-full pt-24">
+      <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/3">
           <MusicPlayer />
         </div>

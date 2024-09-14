@@ -54,7 +54,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-pink-200 via-purple-200 to-blue-300 flex flex-col h-screen items-center justify-center p-4">
+    <div className="bg-gradient-to-br from-pink-100 via-purple-200 to-blue-300 flex flex-col h-screen items-center justify-center p-4">
       <h1 
         ref={titleRef}
         className="text-7xl font-bold mb-4 transition-all duration-300 ease-in-out text-purple-500"
@@ -77,7 +77,7 @@ const HomePage = () => {
       </div>
       <button
         onClick={handleDreamClick}
-        className="px-8 py-3 font-bold bg-gradient-to-br from-pink-200 border-2 hover:bg-white via-purple-300 to-blue-200 text-white rounded-full text-xl transition duration-300 ease-in-out transform hover:-translate-y-1 active:translate-y-0"
+        className="px-8 py-3 font-bold bg-gradient-to-br from-pink-200 border-2 hover:bg-white via-purple-300 to-blue-200 text-white rounded-full text-xl transition duration-300 ease-in-out transform hover:scale-105"
       >
         Let's Dream!
       </button>

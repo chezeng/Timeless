@@ -38,9 +38,7 @@ const PortfolioItem = ({ id, title, description, imageUrl }) => {
           </button>
 
           <button className="action-button">
-            <Link to="/portfolio/shared">
               <Share2 />
-            </Link>
           </button>
         </div>
       </div>

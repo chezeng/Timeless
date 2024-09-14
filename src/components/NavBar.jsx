@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const location = useLocation();
-  const navItems = ['Home', 'Generation', 'Portfolio', 'Community', 'Account'];
+  const navItems = ['Home', 'Generation', 'Portfolio', 'Community'];
   const [visible, setVisible] = useState(true);
   const [y, setY] = useState(window.scrollY);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Simulating login state
@@ -39,8 +39,8 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed z-10 w-full shadow-md py-4 bg-white transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link to="/" className="flex items-center space-x-2 group">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/" className="flex items-center space-x-2 group -ml-4 mr-4">
           <img src="/src/assets/logo.png" alt="Timeless logo" className="w-8 h-8" />
           <p className="text-2xl font-bold text-purple-600 group-hover:text-purple-700 transition-colors duration-300">Timeless</p>
         </Link>
@@ -71,7 +71,7 @@ const Navbar = () => {
           {isLoggedIn ? (
             <Link 
               to="/profile"
-              className="flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
+              className="flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 hover:shadow-lg"
             >
               <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
               <span>Profile</span>
@@ -80,7 +80,7 @@ const Navbar = () => {
             <>
               <Link 
                 to="/login"
-                className="px-4 py-2 rounded-md text-sm font-medium text-purple-600 border border-purple-600 hover:bg-purple-50 transition-all duration-300 ease-in-out"
+                className="px-4 py-2 rounded-md text-sm font-medium text-purple-600 border border-purple-600 hover:bg-purple-50 transition-all transform hover:-translate-y-0.5"
               >
                 Login
               </Link>
