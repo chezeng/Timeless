@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import axios from 'axios';
 
-const MusicPlayer = () => {
+const MusicPlayer = ({ thoughts }) => {
   const [musicList, setMusicList] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -11,8 +11,10 @@ const MusicPlayer = () => {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    fetchMusicList();
-  }, []);
+    if (thoughts) {
+      fetchMusicList();
+    }
+  }, [thoughts]);
 
   useEffect(() => {
     if (musicList.length > 0) {
@@ -22,7 +24,14 @@ const MusicPlayer = () => {
 
   const fetchMusicList = async () => {
     try {
-      const response = await axios.post('http://10.37.117.49:5000/generate_audio');
+      const response = await axios.post('http://10.37.117.49:5000/generate_audio', {
+        time: extractTime(thoughts),
+        location: extractLocation(thoughts),
+      }, {
+        headers: {
+          'token': 'your-api-token-here'
+        }
+      });
       setMusicList(response.data);
     } catch (error) {
       console.error('Error fetching music list:', error);
@@ -134,4 +143,53 @@ const MusicPlayer = () => {
   );
 };
 
-export default MusicPlayer;
+const Generation = () => {
+  const [thoughts, setThoughts] = useState('');
+
+  return (
+    <div className="p-10 md:h-screen h-full pt-24">
+      <div className="flex flex-col md:flex-row gap-8">
+        <div className="w-full md:w-1/3">
+          <MusicPlayer thoughts={thoughts} />
+        </div>
+        <div className="w-full md:w-2/3">
+          <div className="grid grid-cols-4 gap-4 bg-purple-400 p-4 rounded-lg">
+            {[...Array(4)].map((_, index) => (
+              <div 
+                key={index}
+                className="aspect-square bg-purple-300 rounded-lg shadow-md transition duration-300 ease-in-out hover:shadow-lg hover:scale-105"
+              />
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-row">
+            <div className="mb-4 mr-5 w-full">
+              <textarea
+                className="w-full text-black bg-white p-4 rounded-lg shadow-md border border-purple-200 focus:border-purple-400 focus:ring focus:ring-purple-200 focus:ring-opacity-50 resize-none"
+                rows="10"
+                placeholder="Use your imagination to write down an era and place you want to stay!"
+                value={thoughts}
+                onChange={(e) => setThoughts(e.target.value)}
+                thoughts={thoughts} setThoughts={setThoughts}
+              />
+            </div>
+
+            <div className="flex flex-col space-y-4 w-1/4 text-sm md:text-md lg:text-lg">
+              <button className="px-6 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0 shadow-md">
+                Upload Photo
+              </button>
+              <button className="px-6 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0 shadow-md">
+                Stop and Edit
+              </button>
+              <button className="px-6 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0 shadow-md">
+                Let's Dream!
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Generation;

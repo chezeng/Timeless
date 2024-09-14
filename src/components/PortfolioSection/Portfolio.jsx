@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from "react";
 import './portfolio.css'; 
 import PortfolioItem from './PortfolioItem'; 
-import axios from 'axios';
 import { Video, Heart, Share2 } from 'lucide-react';
 
 const Portfolio = () => {
   const [items, setItems] = useState([]);
   const [activeSection, setActiveSection] = useState("video");
-
-  const fetchItems = async () => {
-    try {
-      const response = await axios.get(`http://your-mongodb-atlas-api-url/${activeSection}`);
-      setItems(response.data);
-    } catch (error) {
-      console.error('Error fetching items:', error);
-    }
-  };
 
   // Dummy cases
   const videoItems = [
@@ -54,8 +44,8 @@ const Portfolio = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
       <div className="portfolio-container">
-        <nav className="subsection-nav">
-          <button className={`subsection-nav-button text-white  transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0
+        <nav className="mt-10">
+          <button className={`subsection-nav-button text-white transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0
           ${activeSection === "video" ? "active" : ""}`}
             onClick={() => setActiveSection("video")}>
               <Video />
@@ -63,14 +53,15 @@ const Portfolio = () => {
             
           <button className={`subsection-nav-button text-white transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0
           ${activeSection === "liked" ? "active" : ""}`}
-              onClick={() => setActiveSection("liked")}>
-                <Heart />
+            onClick={() => setActiveSection("liked")}>
+              <Heart />
           </button>
 
           <button
-            className={`subsection-nav-button text-white transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0}`}
+            className={`subsection-nav-button text-white transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0}
+            ${activeSection === "shared" ? "active" : ""}`}
             onClick={() => setActiveSection("shared")}>
-                <Share2 />
+              <Share2 />
           </button>
         </nav>
 
