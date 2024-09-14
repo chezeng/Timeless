@@ -41,12 +41,51 @@ def generate_image():
     elaborated_image_prompt = Cohere().elaborate_image_prompt(image_prompt)
     summarized_image_prompt = GroqAPI().summarize_prompt(image_prompt)
     image_url = DallE3().generate_image(elaborated_image_prompt)
+
+    user_id = request.json['userId']
+    prompt_location = request.json['location']
+    prompt_time = request.json['time']
+
+    result = mongo.db.time_count.find({
+        'userid': user_id,
+        'time': prompt_time
+    }) 
+    if (result == []):
+        mongo.db.time_count.insert_one({
+            'userid': user_id,
+            'time': prompt_time,
+            'count': 1
+        })
+    else:
+        mongo.db.time_count.update_one({
+            'userid': user_id,
+            'time': prompt_time
+        }, {'$set' : {'count' : 1 + result[0].get('count')}})
+    
+
+    result = mongo.db.location_count.find({
+        'userid': user_id,
+        'location': prompt_location
+    }) 
+    if (result == []):
+        mongo.db.location_count.insert_one({
+            'userid': user_id,
+            'location': prompt_location,
+            'count': 1
+        })
+    else:
+        mongo.db.location_count.update_one({
+            'userid': user_id,
+            'location': prompt_location
+        }, {'$set' : {'count' : 1 + result[0].get('count')}})
+        
     return Result.success({
         'originalPrompt': image_prompt,
         'elaboratedPrompt': elaborated_image_prompt,
         'summarizedPrompt': summarized_image_prompt,
         'imageUrl': image_url
     }).get_response('Image Generation')
+    
 
 
 @app.route('/generate_audio', methods=['POST'])
@@ -72,3 +111,34 @@ def signup():
                 'username': current_user.username,
             })
         return result.get_response('Signup')
+    
+@app.route('/communityfeed', methods=['GET'])
+def communityfeed():
+    user_id = request.headers['userId']
+    result = mongo.db.time_count.find_one({
+        'userid': user_id
+    }, sort=[('count', PyMongo.ASCENDING)])
+    if (result == []):
+        topTime = "1980"
+    else:
+        topTime = result[0].get('time')
+
+    result = mongo.db.location_count.find_one({
+        'userid': user_id
+    }, sort=[('count', PyMongo.ASCENDING)])
+    if (result == []):
+        topLocation = "NewYork"
+    else:
+        topLocation = result[0].get('location')
+    
+    
+    result1 = mongo.db.image.find({
+        'time': topTime
+    })
+    result2 = mongo.db.image.find({
+        'location': topLocation
+    })
+    result3 = result1 + result2
+    result3 = list(set(result3))
+    return result3
+    
