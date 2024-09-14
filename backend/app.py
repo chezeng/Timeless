@@ -226,8 +226,9 @@ def fetch_community_feed():
 
     return Result.success(feed).get_response('Fetch Community Feed')
 
-@app.route('/userprofile', methods=['GET'])
-def searchProfile():
+
+@app.route('/profile', methods=['GET'])
+def get_user_profile():
     token = request.headers['token']
     response = requests.post(
         url="https://dev-uepv8601rzfynqzi.us.auth0.com/userinfo",
@@ -235,4 +236,6 @@ def searchProfile():
             "access_token": token
         }
     )
-    print(response)
+    if response.status_code == 200:
+        return Result.success(response.json()).get_response('User Profile')
+    return Result.failure(response.status_code, response.text).get_response('User Profile')
