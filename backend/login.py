@@ -1,7 +1,6 @@
 from user import current_user
 import requests
 
-
 class login_management:
     def __init__(self, user):
         self.user = user
