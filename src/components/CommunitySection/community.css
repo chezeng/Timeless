@@ -1,25 +1,33 @@
+.community-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
+  box-sizing: border-box;
+}
+
 .gallery {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  max-width: 1200px;
-  padding: 20px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 70vw;   
+  height: 100vh;  
+  max-width: 1600px;
 }
 
 .box {
   background-color: purple;
-  width: 100%;
-  aspect-ratio: 1 / 1;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5vw;
+  border-radius: 8px;
 }
 
 .big {
   grid-column: span 2;
   grid-row: span 2;
-}
-
-.small {
-  grid-column: span 1;
-  grid-row: span 1;
 }
