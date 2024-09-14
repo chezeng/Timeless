@@ -12,6 +12,10 @@ const HomePage = () => {
   const [selectedPlace, setSelectedPlace] = useState('New York City');
   const navigate = useNavigate();
 
+  const handleDream = () => {
+    navigate('/generation');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 flex flex-col">
       <main className="flex-grow flex flex-col items-center justify-center px-4 text-center">
@@ -33,7 +37,7 @@ const HomePage = () => {
                 {timeOptions.map((time) => (
                   <li
                     key={time}
-                    className="px-4 py-2 hover:bg-purple-50 cursor-pointer"
+                    className="px-4 py-2 hover:bg-purple-50 cursor-pointer text-black"
                     onClick={() => {
                       setSelectedTime(time);
                       setShowTimeList(false);
@@ -75,7 +79,7 @@ const HomePage = () => {
         
         <button
           className="px-8 py-3 bg-purple-600 text-white rounded-full text-lg font-medium hover:bg-purple-700 transition duration-300 ease-in-out transform hover:-translate-y-1 active:translate-y-0"
-          onClick={navigate('/generation')}
+          onClick={handleDream}
         >
           Let's Dream!
         </button>
