@@ -5,7 +5,7 @@ import Home from './components/Home';
 import Generation from './components/GenerationPage/Generation';
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState('Home');
+  const navigate = useNavigate();
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
