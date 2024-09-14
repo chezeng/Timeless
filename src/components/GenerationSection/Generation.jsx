@@ -9,6 +9,7 @@ const Generation = () => {
   const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
   const [musicData, setMusicData] = useState(null); // State for music data
+  const [thoughts, setThoughts] = useState('');
 
   const generateImages = async () => {
     if (!time || !location) {
@@ -19,8 +20,8 @@ const Generation = () => {
     try {
       const imageRequests = [...Array(4)].map(async () => {
         const response = await axios.post(`${config.base_url}/generate_image`, {
-          time,
-          location
+          time: time,
+          location: location,
         }, {
           headers: {
             token: config.token
