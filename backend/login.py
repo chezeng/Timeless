@@ -1,7 +1,6 @@
 from user import current_user
 import requests
 
-
 class login_management:
     def __init__(self, user):
         self.user = user
@@ -21,10 +20,19 @@ class login_management:
     def login(self, redirectLink):
         response = requests.get(
             url = "https://dev-uepv8601rzfynqzi.us.auth0.com/authorize",
-            json={
+            params={
                 "response_type" : "token",
                 "client_id" : "O4c53QdJ9k3kjdTM6D8yYkTzKeOe6LNi",
                 "redirect_uri" : redirectLink
+            }
+        )
+        print(response)
+    
+    def logout(self, returnToLink):
+        response = requests.get (
+            url = "https://dev-uepv8601rzfynqzi.us.auth0.com/v2/logout",
+            params={
+                "returnTo" : returnToLink
             }
         )
         print(response)
