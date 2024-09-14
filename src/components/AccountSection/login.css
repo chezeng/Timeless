@@ -1,0 +1,120 @@
+/* General styles for the page */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Gradient background for the login page */
+.min-h-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Main container styles */
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content horizontally */
+    justify-content: center; /* Center the content vertically */
+    text-align: center;
+}
+
+/* Header styles */
+.display-1 {
+    font-size: 3rem;
+    color: #630C92;
+    margin-bottom: 1rem;
+}
+
+/* Form background styles */
+.form-bg {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Form group styles */
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* Label styles */
+.form-group label {
+    color: #630C92;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Input styles */
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #630C92;
+    border-radius: 0.5rem;
+    transition: border-color 0.3s;
+    color: black;
+}
+
+/* Input focus effect */
+.form-control:focus {
+    border-color: #630C92;
+    outline: none;
+}
+
+/* Button styles */
+.btn {
+    background-color: #630C92;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+/* Button hover effect */
+.btn:hover {
+    background-color: #7209b7;
+}
+
+/* Link styles */
+.link-primary {
+    display: block;
+    margin-top: 1rem;
+    color: #630C92;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+/* Link hover effect */
+.link-primary:hover {
+    color: #7209b7;
+}
+
+/* Add this to your existing CSS styles */
+
+/* Logo container styles */
+/* Logo container styles */
+.logo-container {
+    margin-bottom: 1.5rem; /* Add space below the logo */
+}
+
+/* Logo styles */
+.logo {
+    width: 100px; /* Adjust width as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 1rem; /* Space between logo and title */
+}
+
+/* Existing styles can remain the same */
+
+/* Existing styles can remain the same */
