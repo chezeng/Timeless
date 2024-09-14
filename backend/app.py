@@ -182,9 +182,23 @@ def signup():
             mongo.db.user.insert_one({
                 'email': current_user.email,
                 'username': current_user.username,
-                'picture' : current_user.profile_picture
+                'picture' : current_user.profile_picture,
+                'password': current_user.password
             })
         return result.get_response('Signup')
+
+@app.route('/login', methods=['POST'])
+def login():
+    if 'username' in request.json and 'password' in request.json:
+        result = mongo.db.user.find_one({
+            'user_id' : request.headers.get('username'),
+            'password' : request.headers.get('password')
+        })
+        if (not result):
+            return Result.failure(result.status_code, result.text).get_response('User Profile')
+        return result.json()
+    
+
 
 
 @app.route('/community_feed', methods=['GET'])
@@ -239,3 +253,8 @@ def get_user_profile():
     if response.status_code == 200:
         return Result.success(response.json()).get_response('User Profile')
     return Result.failure(response.status_code, response.text).get_response('User Profile')
+
+
+
+
+
