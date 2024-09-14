@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause } from 'lucide-react';
-import axios from 'axios';
 
 const MusicPlayer = () => {
   const [musicList, setMusicList] = useState([]);

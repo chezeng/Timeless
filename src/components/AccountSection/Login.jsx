@@ -1,20 +1,32 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
+import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import { Link } from 'react-router-dom';
 import './login.css';
-import logo from '../../timeless-logo-no-words.png'; // Update the path to your logo
+import logo from '../../timeless-logo-no-words.png';
 
-const Login = () => {
-    const usernameRef = useRef(null);
-    const passwordRef = useRef(null);
+const LoginForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { loginWithRedirect, isAuthenticated, isLoading, error } = useAuth0();
 
-    const getLogin = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const username = usernameRef.current.value;
-        const password = passwordRef.current.value;
-        
-        // Perform login logic here with the username and password
-        console.log('Logging in with:', username, password);
+        loginWithRedirect({
+            login_hint: email
+        });
     };
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Oops... {error.message}</div>;
+    }
+
+    if (isAuthenticated) {
+        return <div>You are logged in!</div>;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
@@ -22,27 +34,31 @@ const Login = () => {
                 <img src={logo} alt="Timeless Logo" className="logo" />
                 <h1 className="display-1">Timeless</h1>
                 <div className="form-bg rounded default-shadow">
-                    <form onSubmit={getLogin}>
+                    <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="username-login">Email</label>
+                            <label htmlFor="email-login">Email</label>
                             <input
-                                ref={usernameRef}
-                                type="text"
+                                type="email"
                                 className="form-control"
                                 id="email-login"
+                                name="email"
                                 placeholder="Enter email"
                                 required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password-login">Password</label>
                             <input
-                                ref={passwordRef}
                                 type="password"
                                 className="form-control"
                                 id="password-login"
+                                name="password"
                                 placeholder="Enter password"
                                 required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
                         <div className="form-group text-center">
@@ -53,6 +69,20 @@ const Login = () => {
                 </div>
             </div>
         </div>
+    );
+};
+
+const Login = () => {
+    return (
+        <Auth0Provider
+            domain="dev-uepv8601rzfynqzi.us.auth0.com"
+            clientId="O4c53QdJ9k3kjdTM6D8yYkTzKeOe6LNi"
+            authorizationParams={{
+                redirect_uri: window.location.origin
+            }}
+        >
+            <LoginForm />
+        </Auth0Provider>
     );
 };
 
