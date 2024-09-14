@@ -38,9 +38,9 @@ def api_greeting():
 
 @app.route('/generate_image', methods=['POST'])
 def generate_image():
-    token_verification = verify_token(request.headers.get('token'))
-    if not token_verification.success:
-        return token_verification.get_response('Image Generation')
+    #token_verification = verify_token(request.headers.get('token'))
+    #if not token_verification.success:
+    #    return token_verification.get_response('Image Generation')
     if 'location' in request.json:
         location = request.json['location']
     else:
@@ -53,6 +53,10 @@ def generate_image():
         description = request.json['description']
     else:
         description = ''
+    if 'token' in request.json:
+        username = request.json['token']
+    else:
+        return Result.failure(400, 'Creator is missing').get_response('Image Generation')
     image_prompt = 'Location: ' + location + ', Time: ' + time
     if description:
         image_prompt += ', Description: ' + description
@@ -63,41 +67,41 @@ def generate_image():
     image_url = DallE3().generate_image(elaborated_image_prompt)
 
     mongo.db.image.insert_one({
-        'user_id': request.headers.get('token'),
+        'user_id': username,
         'location': location,
         'time': time,
         'url': image_url
     })
 
     result = mongo.db.time_count.find_one({
-        'user_id': request.headers.get('token'),
+        'user_id': username,
         'time': time
     })
     if not result:
         mongo.db.time_count.insert_one({
-            'user_id': request.headers.get('token'),
+            'user_id': username,
             'time': time,
             'count': 1
         })
     else:
         mongo.db.time_count.update_one({
-            'user_id': request.headers.get('token'),
+            'user_id': username,
             'time': time
         }, {'$set': {'count': 1 + result.get('count')}})
 
     result = mongo.db.location_count.find_one({
-        'user_id': request.headers.get('token'),
+        'user_id': username,
         'location': location
     })
     if not result:
         mongo.db.location_count.insert_one({
-            'user_id': request.headers.get('token'),
+            'user_id': username,
             'location': location,
             'count': 1
         })
     else:
         mongo.db.location_count.update_one({
-            'user_id': request.headers.get('token'),
+            'user_id': username,
             'location': location
         }, {'$set': {'count': 1 + result.get('count')}})
 
@@ -175,30 +179,35 @@ def generate_video():
 @app.route('/signup', methods=['POST'])
 def signup():
     if 'username' in request.json and 'email' in request.json and 'password' in request.json:
-        current_user = CurrentUser(request.json['email'], request.json['password'], request.json['username'])
-        login_management = LoginManagement(current_user)
-        result = login_management.signup()
-        if result.success:
-            mongo.db.user.insert_one({
-                'email': current_user.email,
-                'username': current_user.username,
-                'picture': current_user.profile_picture,
-                'password': current_user.password
-            })
-        return result.get_response('Signup')
+        result = mongo.db.user.find_one({
+            'username' : request.json.get('username')
+        })
+        if result:
+            return Result.failure(404, 'Username already exists').get_response('Login')
+        mongo.db.user.insert_one({
+            'email': request.json.get('email'),
+            'username': request.json.get('username'),
+            'picture': 'https://static.vecteezy.com/system/resources/previews/033/882/148/original/transparent-background-person-icon-free-png.png',
+            'password': request.json.get('password')
+        })
+        return Result.success('User signed up successfully').get_response('User Profile')
+
 
 @app.route('/login', methods=['POST'])
 def login():
     if 'username' in request.json and 'password' in request.json:
         result = mongo.db.user.find_one({
-            'user_id' : request.headers.get('username'),
-            'password' : request.headers.get('password')
+            'username': request.json.get('username'),
+            'password': request.json.get('password')
         })
-        if (not result):
-            return Result.failure(result.status_code, result.text).get_response('User Profile')
-        return result.json()
-
-
+        print(result)
+        if not result:
+            return Result.failure(404, 'Username and password does not match').get_response('Login')
+        return Result.success({
+            'userId': str(result.get('_id')),
+            'username': result.get('username'),
+            'email': result.get('email'),
+        }).get_response('Login')
 
 
 @app.route('/community_feed', methods=['GET'])
@@ -253,3 +262,13 @@ def get_user_profile():
     if response.status_code == 200:
         return Result.success(response.json()).get_response('User Profile')
     return Result.failure(response.status_code, response.text).get_response('User Profile')
+
+@app.route('/portfolio_images', methods=['GET'])
+def get_user_portfolio():
+    token = request.headers['username']
+    images = []
+    result = mongo.db.image.find({
+        'user_id': token
+    })
+    for item in result:
+        images.append(item.get('url'))
