@@ -1,33 +1,25 @@
 .gallery {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    max-width: 1200px;
-    padding: 20px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .box {
-    background-color: purple;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 20px;
-  }
-  
-  .big {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-  
-  .small {
-    grid-column: span 1;
-    grid-row: span 1;
-  }
-  
-  .loading {
-    text-align: center;
-    padding: 20px;
-    font-size: 18px;
-    grid-column: 1 / -1;
-  }
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-width: 1200px;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.box {
+  background-color: purple;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.big {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.small {
+  grid-column: span 1;
+  grid-row: span 1;
+}
