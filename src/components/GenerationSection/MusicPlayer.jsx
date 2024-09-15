@@ -39,7 +39,7 @@ const MusicPlayer = ({ musicData, isLoading }) => {
   };
 
   return (
-    <div className="bg-purple-200 rounded-lg p-6 shadow-md max-w-sm mx-auto">
+    <div className="bg-gradient-to-br from-blue-100 border-4 border-white hover:bg-white via-purple-200 to-purple-200 rounded-lg p-6 shadow-md max-w-sm mx-auto">
       <div className="aspect-square bg-purple-300 rounded-lg mb-4 overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
@@ -51,7 +51,7 @@ const MusicPlayer = ({ musicData, isLoading }) => {
           <div className="w-full h-full bg-purple-400"></div> // Placeholder
         )}
       </div>
-      <h2 className="text-xl font-semibold mb-2 ml-2 text-purple-600">{musicData?.title || 'Ready for a cool song?'}</h2>
+      <h2 className="text-xl font-semibold mb-2 ml-2 text-purple-600 flex justify-center">{musicData?.title || 'Ready for a cool song?'}</h2>
       <div className="mb-4 bg-purple-100 rounded-full h-1 overflow-hidden">
         <div className="progress-bar-fill bg-purple-500 h-full w-0 transition-all duration-300 ease-in-out"></div>
       </div>

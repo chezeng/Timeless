@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-
 import axios from 'axios';
 import './portfolio.css';
 import PortfolioItem from './PortfolioItem';
 import config from '../../apiConfig.json';
 import { Video, Heart, Share2 } from 'lucide-react';
 
+
 const Portfolio = () => {
   const [items, setItems] = useState([]);
-  const [activeSection, setActiveSection] = useState("");
+  const [activeSection, setActiveSection] = useState("all");
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
@@ -38,43 +38,68 @@ const Portfolio = () => {
   };
 
   const handleLike = async (id) => {
-    // Implement like functionality
-    console.log("Like item:", id);
+    const updatedItems = items.map(item => 
+      item.id === id ? { ...item, is_liked: !item.is_liked } : item
+    );
+    setItems(updatedItems);
+    // TODO: Implement API call to update like status
   };
 
   const handleShare = async (id) => {
-    // Implement share functionality
-    console.log("Share item:", id);
+    const updatedItems = items.map(item => 
+      item.id === id ? { ...item, is_shared: !item.is_shared } : item
+    );
+    setItems(updatedItems);
+    // TODO: Implement API call to update share status
   };
 
   const handleDelete = async (id) => {
-    // Implement delete functionality
-    console.log("Delete item:", id);
+    const updatedItems = items.filter(item => item.id !== id);
+    setItems(updatedItems);
+    // TODO: Implement API call to delete item
   };
 
   return (
-    <div className="portfolio-container h-screen">
-      <div className="portfolio-header">
-        <button onClick={() => setActiveSection("video")}>
-          <Video /> Videos
+    <div className="portfolio-container bg-gradient-to-br from-pink-100 via-purple-100 to-blue-200 p-10 min-h-screen pt-40">
+      <nav className="fixed top-24 left-10 flex flex-col space-y-4">
+        <button
+          className={`subsection-nav-button text-white transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0
+          ${activeSection === "all" ? "bg-blue-500" : "bg-gray-400"}`}
+          onClick={() => setActiveSection("all")}
+        >
+          <Video />
         </button>
-        <button onClick={() => setActiveSection("liked")}>
-          <Heart /> Liked
+        <button
+          className={`subsection-nav-button text-white transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0
+          ${activeSection === "liked" ? "bg-red-500" : "bg-gray-400"}`}
+          onClick={() => setActiveSection("liked")}
+        >
+          <Heart />
         </button>
-        <button onClick={() => setActiveSection("shared")}>
-          <Share2 /> Shared
+        <button
+          className={`subsection-nav-button text-white transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0
+          ${activeSection === "shared" ? "bg-green-500" : "bg-gray-400"}`}
+          onClick={() => setActiveSection("shared")}
+        >
+          <Share2 />
         </button>
-      </div>
-      <div className="portfolio-items">
-        if(items){items.map((item) => (
+      </nav>
+
+      <div>
+        {filterItems().map((item) => (
           <PortfolioItem
             key={item.id}
+            id={item.id}
+            title={item.title}
+            description={item.description}
             image={item.imageUrl}
             video={item.url}
             music={item.musicUrl}
-            onLike={() => handleLike(item.id)}
-            onShare={() => handleShare(item.id)}
-            onDelete={() => handleDelete(item.id)}
+            isLiked={item.is_liked}
+            isShared={item.is_shared}
+            onLike={handleLike}
+            onShare={handleShare}
+            onDelete={handleDelete}
           />
         ))}
       </div>

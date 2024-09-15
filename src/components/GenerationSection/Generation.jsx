@@ -163,7 +163,7 @@ const Generation = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-200 p-10 md:h-screen h-full pt-40">
+    <div className="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-200 p-10 md:h-screen h-full pt-30">
       {isLoadingVideo && (  // Fullscreen loading spinner for video
         <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
           <CircularProgress size={80} />
@@ -175,7 +175,7 @@ const Generation = () => {
         </div>
         <div className="w-full md:w-2/3">
           <ImageGrid images={images} onSelect={handleImageSelect} selectedImage={selectedImage} isLoading={isLoadingImages} /> {/* Pass isLoadingImages prop */}
-          <div className="mt-8 flex flex-row space-x-3">
+          <div className="mt-8 flex flex-row space-x-3 bg-gradient-to-br from-blue-100 border-4 border-white hover:bg-white via-purple-200 to-purple-200 rounded-lg p-6 shadow-md ">
             <ThoughtInput setTime={setTime} setLocation={setLocation} setImages={setImages} />
             <ActionButtons generateImages={generateImages} showMusic={generateMusic} handleNext={handleNext} selectedImage={selectedImage} generateImagesWithDescription={generateImagesWithDescription} /> 
           </div>
