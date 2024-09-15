@@ -55,7 +55,7 @@ const Navbar = () => {
                 to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                 className={`px-3 py-2 rounded-md  transition-all duration-300 ease-in-out
                   ${isActive
-                    ? 'text-purple-600 font-bold border-b-2 border-purple-600' 
+                    ? 'text-purple-600 font-bold border-purple-600' 
                     : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
                   }
                 `}
