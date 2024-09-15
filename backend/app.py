@@ -220,6 +220,7 @@ def login():
             'userId': str(result.get('_id')),
             'username': result.get('username'),
             'email': result.get('email'),
+            'picture': result.get('picture')
         }).get_response('Login')
 
 
