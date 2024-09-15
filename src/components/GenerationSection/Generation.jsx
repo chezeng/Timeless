@@ -98,7 +98,8 @@ const Generation = () => {
     try {
       const response = await axios.post(`${config.base_url}/generate_video`, {
         prompt: `${time} ${location}`,
-        imageUrl: selectedImage.imageUrl
+        imageUrl: selectedImage.imageUrl,
+        musicUrl: musicData
       }, {
         headers: { token: config.token }
       });
