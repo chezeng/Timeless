@@ -3,7 +3,6 @@ from flask_pymongo import PyMongo
 
 from BLTCY import BLTCY
 from Groq import GroqAPI
-from login import LoginManagement
 from result import Result
 from Cohere import Cohere
 from OpenAI import DallE3
@@ -11,9 +10,6 @@ from Suno import Suno
 from flask_cors import CORS, cross_origin
 import configparser
 import requests
-
-
-from user import CurrentUser
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -38,9 +34,9 @@ def api_greeting():
 
 @app.route('/generate_image', methods=['POST'])
 def generate_image():
-    #token_verification = verify_token(request.headers.get('token'))
-    #if not token_verification.success:
-    #    return token_verification.get_response('Image Generation')
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Image Generation')
     if 'location' in request.json:
         location = request.json['location']
     else:
@@ -53,10 +49,7 @@ def generate_image():
         description = request.json['description']
     else:
         description = ''
-    if 'token' in request.headers:
-        username = request.headers['token']
-    else:
-        return Result.failure(400, 'Creator is missing').get_response('Image Generation')
+    username = request.headers['token']
     image_prompt = 'Location: ' + location + ', Time: ' + time
     if description:
         image_prompt += ', Description: ' + description
@@ -115,14 +108,17 @@ def generate_image():
 
 @app.route('/generate_audio', methods=['POST'])
 def generate_audio():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Audio Generation')
     if 'location' in request.json:
         location = request.json['location']
     else:
-        return Result.failure(400, 'Location is missing').get_response('Image Generation')
+        return Result.failure(400, 'Location is missing').get_response('Audio Generation')
     if 'time' in request.json:
         time = request.json['time']
     else:
-        return Result.failure(400, 'Time is missing').get_response('Image Generation')
+        return Result.failure(400, 'Time is missing').get_response('Audio Generation')
     if 'description' in request.json:
         description = request.json['description']
     else:
@@ -155,6 +151,9 @@ def generate_audio():
 
 @app.route('/generate_video', methods=['POST'])
 def generate_video():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Video Generation')
     if 'prompt' in request.json:
         prompt = request.json['prompt']
     else:
@@ -168,7 +167,7 @@ def generate_video():
 
     video_url = BLTCY().image_to_video(image_url, prompt)
 
-    mongo.db.image.insert_one({
+    mongo.db.video.insert_one({
         'user_id': request.headers.get('token'),
         'url': video_url
     })
@@ -180,14 +179,15 @@ def generate_video():
 def signup():
     if 'username' in request.json and 'email' in request.json and 'password' in request.json:
         result = mongo.db.user.find_one({
-            'username' : request.json.get('username')
+            'username': request.json.get('username')
         })
         if result:
             return Result.failure(404, 'Username already exists').get_response('Login')
         mongo.db.user.insert_one({
             'email': request.json.get('email'),
             'username': request.json.get('username'),
-            'picture': 'https://static.vecteezy.com/system/resources/previews/033/882/148/original/transparent-background-person-icon-free-png.png',
+            'picture': 'https://static.vecteezy.com/system/resources/previews/033/882/148/original/transparent'
+                       '-background-person-icon-free-png.png',
             'password': request.json.get('password')
         })
         return Result.success('User signed up successfully').get_response('User Profile')
@@ -212,6 +212,9 @@ def login():
 
 @app.route('/community_feed', methods=['GET'])
 def fetch_community_feed():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Fetch Community Feed')
     user_id = request.headers['token']
     result = mongo.db.time_count.find({
         'user_id': user_id
@@ -252,6 +255,9 @@ def fetch_community_feed():
 
 @app.route('/profile', methods=['GET'])
 def get_user_profile():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Get User Profile')
     token = request.headers['token']
     response = requests.post(
         url="https://dev-uepv8601rzfynqzi.us.auth0.com/userinfo",
@@ -260,11 +266,15 @@ def get_user_profile():
         }
     )
     if response.status_code == 200:
-        return Result.success(response.json()).get_response('User Profile')
-    return Result.failure(response.status_code, response.text).get_response('User Profile')
+        return Result.success(response.json()).get_response('Get User Profile')
+    return Result.failure(response.status_code, response.text).get_response('Get User Profile')
+
 
 @app.route('/portfolio_images', methods=['GET'])
 def get_user_portfolio():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Get Portfolio Images')
     token = request.headers['token']
     images = []
     result = mongo.db.image.find({
@@ -272,33 +282,41 @@ def get_user_portfolio():
     })
     for item in result:
         images.append(item.get('url'))
-    return images
+    return Result.success({"image": images}).get_response('Get Portfolio Images')
 
-@app.route('/title', method = ['GET'])
+
+@app.route('/title', methods=['GET'])
 def get_picture_title():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Get Picture Title')
     url = request.headers['token']
     result = mongo.db.image.find({
         'url': url
     })
     title = result.get('time') + " " + result.get('location')
-    return title
+    return Result.success({"title": title}).get_response('Get Picture Title')
 
 
 @app.route('/user_email', methods=['GET'])
 def get_user_email():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Get User Email')
     token = request.headers['token']
     result = mongo.db.users.find_one({
-        'user_id' : token
+        'user_id': token
     })
-    return result.get('email')
+    return Result.success({"email": result.get('email')}).get_response('Get User Email')
+
 
 @app.route('/user_password', methods=['GET'])
 def get_user_password():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Get User Password')
     token = request.headers['token']
     result = mongo.db.users.find_one({
-        'user_id' : token
+        'user_id': token
     })
-    return result.get('password')
-
-
-
+    return Result.success({"password": result.get('password')}).get_response('Get User Password')
