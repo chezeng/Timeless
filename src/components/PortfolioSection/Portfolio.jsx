@@ -38,18 +38,25 @@ const Portfolio = () => {
   };
 
   const handleLike = async (id) => {
-    // Implement like functionality
-    console.log("Like item:", id);
+    const response = await axios.post(`${config.base_url}like_video`, {
+        videoId: id
+        }, {
+        headers: { token: localStorage.getItem('userId') }
+        });
+    if (response.data.ok) window.location.reload();
   };
 
-  const handleShare = async (id) => {
-    // Implement share functionality
-    console.log("Share item:", id);
+  const handleShare = async (url) => {
+    window.open(url, '_blank').focus();
   };
 
-  const handleDelete = async (id) => {
-    // Implement delete functionality
-    console.log("Delete item:", id);
+  const handleDelete = async (url) => {
+    const response = await axios.post(`${config.base_url}delete_picture`, {
+      video: url
+    }, {
+      headers: { token: localStorage.getItem('userId') }
+    });
+    if (response.data.ok) window.location.reload();
   };
 
   return (
@@ -72,9 +79,11 @@ const Portfolio = () => {
             image={item.imageUrl}
             video={item.url}
             music={item.musicUrl}
-            onLike={() => handleLike(item.id)}
-            onShare={() => handleShare(item.id)}
-            onDelete={() => handleDelete(item.id)}
+            description={item.prompt}
+            liked={item.liked}
+            onLike={() => {item.liked = 1 - item.liked; console.log(item.liked); handleLike(item.id);}}
+            onShare={() => handleShare(item.imageUrl)}
+            onDelete={() => handleDelete(item.url)}
           />
         ))}
       </div>

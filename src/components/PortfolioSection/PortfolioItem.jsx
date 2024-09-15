@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Heart, Share2, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const PortfolioItem = ({ id, title, description, image, video, music, isLiked, isShared, onLike, onShare, onDelete }) => {
+const PortfolioItem = ({ id, title, description, image, video, music, liked, isShared, onLike, onShare, onDelete }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleDelete = () => {
@@ -27,7 +27,7 @@ const PortfolioItem = ({ id, title, description, image, video, music, isLiked, i
         <p>{description}</p>
         <div className="item-actions">
           <button 
-            className={`action-button ${isLiked ? 'bg-red-500' : ''}`} 
+            className={`action-button ${liked === 1 ? 'bg-red-500' : ''}`}
             onClick={onLike}
           >
             <Heart />
@@ -48,8 +48,9 @@ const PortfolioItem = ({ id, title, description, image, video, music, isLiked, i
       <button className="open-button" onClick={()=>{navigate('/videodisplay', {
           state: {
             videoUrl: video,
-            prompt: ``,
-            musicData: music
+            prompt: description,
+            musicData: music,
+            title: title
           }
         });}}>View
       </button>

@@ -28,7 +28,7 @@ const Generation = () => {
     setIsLoadingImages(true); // Start loading
     try {
       const imageRequests = [...Array(4)].map(async () => {
-        const response = await axios.post(`${config.base_url}/generate_image`, {
+        const response = await axios.post(`${config.base_url}generate_image`, {
           time: time,
           location: location
         }, {
@@ -63,7 +63,7 @@ const Generation = () => {
 
     setIsLoadingMusic(true);  // Start music loading
     try {
-      const response = await axios.post(`${config.base_url}/generate_audio`, {
+      const response = await axios.post(`${config.base_url}generate_audio`, {
         time,
         location
       }, {
@@ -97,10 +97,11 @@ const Generation = () => {
     setIsLoadingVideo(true);  // Start video loading
     try {
       console.log(selectedImage)
-      const response = await axios.post(`${config.base_url}/generate_video`, {
+      const response = await axios.post(`${config.base_url}generate_video`, {
         prompt: selectedImage.summarizedPrompt,
         imageUrl: selectedImage.imageUrl,
-        musicUrl: musicData
+        musicUrl: musicData,
+        title: `${time} ${location}`
       }, {
         headers: { token: localStorage.getItem('userId') }
       });
@@ -109,7 +110,8 @@ const Generation = () => {
         navigate('/videodisplay', {
           state: {
             videoUrl: response.data.data,
-            prompt: `${time} ${location}`,
+            prompt: selectedImage.summarizedPrompt,
+            title: `${time} ${location}`,
             musicData: musicData
           }
         });

@@ -1,5 +1,5 @@
 from flask import Flask, request
-from flask_pymongo import PyMongo
+from flask_pymongo import PyMongo, ObjectId
 
 from BLTCY import BLTCY
 from Groq import GroqAPI
@@ -158,6 +158,10 @@ def generate_video():
         prompt = request.json['prompt']
     else:
         return Result.failure(400, 'Prompt is missing').get_response('Video Generation')
+    if 'title' in request.json:
+        title = request.json['title']
+    else:
+        return Result.failure(400, 'Title is missing').get_response('Video Generation')
     if 'imageUrl' in request.json:
         image_url = request.json['imageUrl']
     else:
@@ -177,6 +181,8 @@ def generate_video():
         'image_url': image_url,
         'music_url': music_url,
         'prompt': prompt,
+        'title': title,
+        'liked': 0
     })
 
     return Result.success(video_url).get_response('Video Generation')
@@ -276,22 +282,11 @@ def get_user_portfolio():
             'imageUrl': item.get('image_url'),
             'musicUrl': item.get('music_url'),
             'prompt': item.get('prompt'),
+            'title': item.get('title'),
             'id': str(item.get('_id')),
+            'liked': item.get('liked')
         })
     return Result.success({"videos": videos}).get_response('Get Portfolio Images')
-
-
-@app.route('/title', methods=['GET'])
-def get_picture_title():
-    token_verification = verify_token(request.headers.get('token'))
-    if not token_verification.success:
-        return token_verification.get_response('Get Picture Title')
-    url = request.headers['token']
-    result = mongo.db.image.find({
-        'url': url
-    })
-    title = result.get('time') + " " + result.get('location')
-    return Result.success({"title": title}).get_response('Get Picture Title')
 
 
 @app.route('/user_profile', methods=['GET'])
@@ -357,25 +352,47 @@ def change_email():
         return Result.failure(400, 'Email is missing').get_response('Change The Email')
     return Result.success().get_response('Change The Email')
 
-@app.route('/delete_picture', method=['DELETE'])
+
+@app.route('/delete_picture', methods=['POST'])
 def delete_picture():
     token_verification = verify_token(request.headers.get('token'))
     if not token_verification.success:
         return token_verification.get_response('Delete Picture')
     token = request.headers['token']
     if 'video' in request.json:
-        videourl = request.json['video']
+        video_url = request.json['video']
         response = mongo.db.video.find_one({
-            'username' : token,
-            'url' : videourl
+            'user_id': token,
+            'url': video_url
         })
-        picurl = response.get('img_url')
-        musicurl = response.get('music_url')
-        mongo.db.video.delete_one ({
-            'user_id' : token,
-            'url' : videourl
+        if not response:
+            return Result.failure(404, 'Video not found').get_response('Delete Picture')
+        image_url = response.get('image_url')
+        music_url = response.get('music_url')
+        mongo.db.video.delete_one({
+            'user_id': token,
+            'url': video_url
         })
-        mongo.db.image.delete_one ({
-            'url' : picurl
+        mongo.db.image.delete_one({
+            'url': image_url
         })
     return Result.success().get_response('Removed The Picture From Portfolio')
+
+
+@app.route('/like_video', methods=['POST'])
+def like_video():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Like The Video')
+    if 'videoId' in request.json:
+        video_id = request.json['videoId']
+    else:
+        return Result.failure(400, 'Video ID is missing').get_response('Like The Video')
+    result = mongo.db.video.find_one({
+        '_id': ObjectId(video_id)
+    })
+    if result:
+        mongo.db.video.update_one({
+            '_id': ObjectId(video_id)
+        }, {'$set': {'liked': 1 - result.get('liked')}})
+    return Result.success().get_response('Like The Video')
