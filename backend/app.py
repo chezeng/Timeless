@@ -272,6 +272,17 @@ def get_user_portfolio():
     })
     for item in result:
         images.append(item.get('url'))
+    return images
+
+@app.route('/title', method = ['GET'])
+def get_picture_title():
+    url = request.headers['token']
+    result = mongo.db.image.find({
+        'url': url
+    })
+    title = result.get('time') + " " + result.get('location')
+    return title
+
 
 @app.route('/user_email', methods=['GET'])
 def get_user_email():
@@ -288,4 +299,6 @@ def get_user_password():
         'user_id' : token
     })
     return result.get('password')
+
+
 
