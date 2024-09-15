@@ -103,7 +103,7 @@ const Profile = () => {
             id="name"
             type="text"
             disabled
-            value='Unchangeable'
+            value='Cheng'
             onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg mt-1"
           />
