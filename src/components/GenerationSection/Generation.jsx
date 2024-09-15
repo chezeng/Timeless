@@ -123,6 +123,45 @@ const Generation = () => {
     }
   };
 
+  const generateImagesWithDescription = async () => {
+    if (!selectedImage) {
+      alert('Please select an image before proceeding.');
+      return;
+    }
+
+    if (!time || !location) {
+      alert('Please provide both time and location to generate images!');
+      return;
+    }
+
+    try {
+      const imageRequests = [...Array(4)].map(async () => {
+        const response = await axios.post(`${config.base_url}/generate_image`, {
+          time: time,
+          location: location,
+          description: selectedImage.summarizedPrompt
+        }, {
+          headers: {
+            token: localStorage.getItem('userId')
+          }
+        });
+
+        if (response.data.ok) {
+          return response.data.data;
+        } else {
+          console.error("Image generation failed:", response.data.message);
+          return null;
+        }
+      });
+
+      // Get all image URLs
+      const imageGenerated = await Promise.all(imageRequests);
+      setImages(imageGenerated.filter(image => image.imageUrl !== null));
+    } catch (error) {
+      console.error("Error generating images:", error);
+    }
+  };
+
   return (
     <div className="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-200 p-10 md:h-screen h-full pt-40">
       {isLoadingVideo && (  // Fullscreen loading spinner for video
@@ -138,7 +177,7 @@ const Generation = () => {
           <ImageGrid images={images} onSelect={handleImageSelect} selectedImage={selectedImage} isLoading={isLoadingImages} /> {/* Pass isLoadingImages prop */}
           <div className="mt-8 flex flex-row space-x-3">
             <ThoughtInput setTime={setTime} setLocation={setLocation} setImages={setImages} />
-            <ActionButtons generateImages={generateImages} showMusic={generateMusic} handleNext={handleNext} selectedImage={selectedImage} /> 
+            <ActionButtons generateImages={generateImages} showMusic={generateMusic} handleNext={handleNext} selectedImage={selectedImage} generateImagesWithDescription={generateImagesWithDescription} /> 
           </div>
         </div>
       </div>

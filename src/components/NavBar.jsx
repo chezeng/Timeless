@@ -85,13 +85,13 @@ const Navbar = () => {
             <>
               <Link 
                 to="/login"
-                className="px-4 py-2 rounded-md text-sm font-medium text-purple-600 border border-purple-600 hover:bg-purple-50 transition-all transform hover:-translate-y-0.5"
+                className="px-4 py-2 rounded-md text-sm font-medium text-purple-600 border border-purple-600 hover:bg-purple-50 transition-all "
               >
                 Login
               </Link>
               <Link 
                 to="/signup"
-                className="px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
+                className="px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out"
               >
                 Register
               </Link>
