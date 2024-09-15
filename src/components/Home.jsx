@@ -51,16 +51,16 @@ const HomePage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-pink-100 via-purple-200 to-blue-300 flex flex-col h-screen items-center justify-center p-4">
+    <div className="font-serif bg-gradient-to-br from-pink-100 via-purple-200 to-blue-300 flex flex-col h-screen items-center justify-center p-4">
       <h1 
         ref={titleRef}
-        className="text-7xl font-bold mb-4 transition-all duration-300 ease-in-out text-purple-500"
+        className="text-7xl font-serif italic font-bold mb-4 transition-all duration-300 ease-in-out text-purple-500"
       >
         Timeless
       </h1>
       <div className="text-3xl mb-8 flex items-center text-purple-700 italic">
-        <span className="mr-1">Relive the moments, feel the</span>
-        <span className='font-bold'>
+        <span className="mr-1 font-serif italic">Relive the moments, feel the</span>
+        <span className='font-bold font-serif italic'>
         <Typewriter
           options={{
             strings: titles,

@@ -12,19 +12,21 @@ import Profile from './components/AccountSection/Profile';
 const App = () => {
 
   return (
-    <Router>
-      <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/generation" element={<Generation />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/videodisplay" element={<VideoDisplay />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path='/profile' element={<Profile />} />
-        </Routes>
-    </Router>
+    <div className='font-serif'>
+      <Router>
+        <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/generation" element={<Generation />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/videodisplay" element={<VideoDisplay />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path='/profile' element={<Profile />} />
+          </Routes>
+      </Router>
+    </div>
   );
 }
 
