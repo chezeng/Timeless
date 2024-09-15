@@ -47,7 +47,7 @@ const Generation = () => {
 
       // Get all image URLs
       const imageGenerated = await Promise.all(imageRequests);
-      setImages(imageGenerated.filter(url => url.imageUrl !== null));
+      setImages(imageGenerated.filter(image => image.imageUrl !== null));
     } catch (error) {
       console.error("Error generating images:", error);
     } finally {
@@ -68,7 +68,7 @@ const Generation = () => {
         location
       }, {
         headers: {
-          token: config.token
+          token: localStorage.getItem('userId')
         }
       });
 
@@ -84,8 +84,8 @@ const Generation = () => {
     }
   };
 
-  const handleImageSelect = (imageUrl) => {
-    setSelectedImage(imageUrl);
+  const handleImageSelect = (image) => {
+    setSelectedImage(image);
   };
 
   const handleNext = async () => {
@@ -96,11 +96,13 @@ const Generation = () => {
 
     setIsLoadingVideo(true);  // Start video loading
     try {
+      console.log(selectedImage)
       const response = await axios.post(`${config.base_url}/generate_video`, {
-        prompt: `${time} ${location}`,
-        imageUrl: selectedImage.imageUrl
+        prompt: selectedImage.summarizedPrompt,
+        imageUrl: selectedImage.imageUrl,
+        musicUrl: musicData
       }, {
-        headers: { token: config.token }
+        headers: { token: localStorage.getItem('userId') }
       });
 
       if (response.data.ok) {

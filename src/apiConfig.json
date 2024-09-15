@@ -1,4 +1,3 @@
 {
-    "base_url": "http://10.37.117.49:5000/",
-    "token": "YOUR_API_TOKEN"
+    "base_url": "http://10.37.117.49:5000/"
 }

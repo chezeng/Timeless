@@ -9,7 +9,7 @@ from OpenAI import DallE3
 from Suno import Suno
 from flask_cors import CORS, cross_origin
 import configparser
-import requests
+
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -162,6 +162,10 @@ def generate_video():
         image_url = request.json['imageUrl']
     else:
         return Result.failure(400, 'Image URL is missing').get_response('Video Generation')
+    if 'musicUrl' in request.json:
+        music_url = request.json['musicUrl']
+    else:
+        music_url = ""
 
     print('[Timeless] Try to get the AI cook the image to video')
 
@@ -169,7 +173,10 @@ def generate_video():
 
     mongo.db.video.insert_one({
         'user_id': request.headers.get('token'),
-        'url': video_url
+        'url': video_url,
+        'image_url': image_url,
+        'music_url': music_url,
+        'prompt': prompt,
     })
 
     return Result.success(video_url).get_response('Video Generation')
@@ -253,36 +260,25 @@ def fetch_community_feed():
     return Result.success(feed).get_response('Fetch Community Feed')
 
 
-@app.route('/profile', methods=['GET'])
-def get_user_profile():
-    token_verification = verify_token(request.headers.get('token'))
-    if not token_verification.success:
-        return token_verification.get_response('Get User Profile')
-    token = request.headers['token']
-    response = requests.post(
-        url="https://dev-uepv8601rzfynqzi.us.auth0.com/userinfo",
-        params={
-            "access_token": token
-        }
-    )
-    if response.status_code == 200:
-        return Result.success(response.json()).get_response('Get User Profile')
-    return Result.failure(response.status_code, response.text).get_response('Get User Profile')
-
-
 @app.route('/portfolio_images', methods=['GET'])
 def get_user_portfolio():
     token_verification = verify_token(request.headers.get('token'))
     if not token_verification.success:
         return token_verification.get_response('Get Portfolio Images')
     token = request.headers['token']
-    images = []
-    result = mongo.db.image.find({
+    videos = []
+    result = mongo.db.video.find({
         'user_id': token
     })
     for item in result:
-        images.append(item.get('url'))
-    return Result.success({"image": images}).get_response('Get Portfolio Images')
+        videos.append({
+            'url': item.get('url'),
+            'imageUrl': item.get('image_url'),
+            'musicUrl': item.get('music_url'),
+            'prompt': item.get('prompt'),
+            'id': str(item.get('_id')),
+        })
+    return Result.success({"videos": videos}).get_response('Get Portfolio Images')
 
 
 @app.route('/title', methods=['GET'])
@@ -298,16 +294,24 @@ def get_picture_title():
     return Result.success({"title": title}).get_response('Get Picture Title')
 
 
-@app.route('/user_email', methods=['GET'])
-def get_user_email():
+@app.route('/user_profile', methods=['GET'])
+def get_user_profile():
     token_verification = verify_token(request.headers.get('token'))
     if not token_verification.success:
-        return token_verification.get_response('Get User Email')
+        return token_verification.get_response('Get User Profile')
     token = request.headers['token']
-    result = mongo.db.users.find_one({
-        'user_id': token
+    result = mongo.db.user.find_one({
+        'username': token
     })
-    return Result.success({"email": result.get('email')}).get_response('Get User Email')
+    if not result:
+        return Result.failure(404, 'User not found').get_response('Get User Profile')
+    profile = {
+        'username': result.get('username'),
+        'email': result.get('email'),
+        'picture': result.get('picture'),
+        'password': result.get('password')
+    }
+    return Result.success(profile).get_response('Get User Profile')
 
 
 @app.route('/user_password', methods=['GET'])
@@ -317,6 +321,38 @@ def get_user_password():
         return token_verification.get_response('Get User Password')
     token = request.headers['token']
     result = mongo.db.users.find_one({
-        'user_id': token
+        'username': token
     })
     return Result.success({"password": result.get('password')}).get_response('Get User Password')
+
+
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Change The Password')
+    token = request.headers['token']
+    if 'password' in request.json:
+        new_password = request.json['password']
+        mongo.db.user.update_one({
+            'username': token
+        }, {'$set': {'password': new_password}})
+    else:
+        return Result.failure(400, 'Password is missing').get_response('Change The Password')
+    return Result.success().get_response('Change The Password')
+
+
+@app.route('/change_email', methods=['POST'])
+def change_email():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Change The Email')
+    token = request.headers['token']
+    if 'email' in request.json:
+        new_email = request.json['email']
+        mongo.db.user.update_one({
+            'username': token
+        }, {'$set': {'email': new_email}})
+    else:
+        return Result.failure(400, 'Email is missing').get_response('Change The Email')
+    return Result.success().get_response('Change The Email')

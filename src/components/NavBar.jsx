@@ -55,7 +55,7 @@ const Navbar = () => {
                 to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                 className={`px-3 py-2 rounded-md  transition-all duration-300 ease-in-out
                   ${isActive
-                    ? 'text-purple-600 font-bold border-b-2 border-purple-600' 
+                    ? 'text-purple-600 font-bold border-purple-600' 
                     : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
                   }
                 `}
@@ -75,7 +75,7 @@ const Navbar = () => {
               className="flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 hover:shadow-lg"
             >
               <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-              <span>Profile</span>
+              <span>{localStorage.getItem('userId')}</span>
             </Link>
               <Button
                   className="px-4 py-2 rounded-md text-sm font-medium text-purple-600 border border-purple-600 hover:bg-purple-50 transition-all transform "

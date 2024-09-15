@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import config from '../../apiConfig.json';
 
 const Profile = () => {
-  const [profileData, setProfileData] = useState({
-    email: 'http://10.37.117.49:5000/profile/email',
-    password: 'http://10.37.117.49:5000/profile/password',
-    picture: 'http://10.37.117.49:5000/profile/picture', // Profile picture URL
-  });
+  const [profileData, setProfileData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
   
@@ -14,17 +11,13 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const token = 'your-auth-token'; // Replace with your token logic
-        const response = await axios.get(`${import.meta.env.REACT_APP_BASE_URL}/profile`, {
+        const response = await axios.get(config.base_url + 'user_profile', {
           headers: {
-            Authorization: `Bearer ${token}`,
+            token: localStorage.getItem('userId')
           },
         });
-        setProfileData({
-          name: response.data.name,
-          email: response.data.email,
-          picture: response.data.picture,
-        });
+        console.log(response.data);
+        setProfileData(response.data.data);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -43,21 +36,15 @@ const Profile = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const token = 'your-auth-token'; // Replace with your token logic
-      const formData = new FormData();
-      formData.append('name', profileData.name);
-      formData.append('email', profileData.email);
-      if (selectedFile) {
-        formData.append('picture', selectedFile); // Add picture if changed
-      }
-
       // Submit form data to backend
-      await axios.post(`${process.env.REACT_APP_BASE_URL}/profile`, formData, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'multipart/form-data',
-        }, 
-      });
+      await axios.post(config.base_url + 'change_email', {
+        email: profileData.email,
+      },
+          {headers: {token: localStorage.getItem('userId')}});
+      await axios.post(config.base_url + 'change_password', {
+            password: profileData.password,
+          },
+          {headers: {token: localStorage.getItem('userId')}});
       alert('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -103,35 +90,34 @@ const Profile = () => {
             id="name"
             type="text"
             disabled
-            value='Test User'
-            onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-            className="w-full px-3 py-2 border bg-white text-black border-gray-300 rounded-lg mt-1"
+            value={profileData.username}
+            className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg mt-1"
           />
         </div>
         
         
         <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700 font-semibold ">
+          <label htmlFor="email" className="block text-gray-700 font-semibold ">
             Email
           </label>
           <input
-            id="name"
+            id="email"
             type="text"
-            value={profileData.name}
-            onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+            value={profileData.email}
+            onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
             className="w-full px-3 py-2 border bg-white text-black border-gray-300 rounded-lg mt-1"
           />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-semibold">
+          <label htmlFor="password" className="block text-gray-700 font-semibold">
             Password
           </label>
           <input
-            id="email"
-            type="email"
-            value={profileData.email}
-            onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+            id="password"
+            type="password"
+            value={profileData.password}
+            onChange={(e) => setProfileData({ ...profileData, password: e.target.value })}
             className="w-full px-3 py-2 border bg-white text-black border-gray-300 rounded-lg mt-1"
           />
         </div>

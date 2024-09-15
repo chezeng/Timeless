@@ -19,8 +19,8 @@ class Cohere(API):
                         'immersive and realistic scenes. Example: change the description “1980s New York Street Dusk” '
                         'to "Realistic New York City street at dusk in 1985, transitioning to evening. Vintage '
                         'vehicles, iconic yellow cabs, light up the avenue. Pedestrians in retro fashion stroll by. '
-                        'The Brooklyn Bridge glows in the fading light, capturing the city\'s energy and movement. '
-                        'Description:')
+                        'The Brooklyn Bridge glows in the fading light, capturing the city\'s energy and movement. Do '
+                        'not use any non ascii or non English characters in the response. Description:')
         response = requests.post(url=self.url, headers=self.headers, json={
             'message': fixed_prompt + image_prompt
         })
