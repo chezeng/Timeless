@@ -3,9 +3,9 @@ import axios from 'axios';
 
 const Profile = () => {
   const [profileData, setProfileData] = useState({
-    name: '',
-    email: '',
-    picture: '', // Profile picture URL
+    email: 'http://10.37.117.49:5000/profile',
+    password: 'http://10.37.117.49:5000/profile',
+    picture: 'http://10.37.117.49:5000/profile', // Profile picture URL
   });
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -15,7 +15,7 @@ const Profile = () => {
     const fetchProfileData = async () => {
       try {
         const token = 'your-auth-token'; // Replace with your token logic
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/profile`, {
+        const response = await axios.get(`${import.meta.env.REACT_APP_BASE_URL}/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -54,9 +54,9 @@ const Profile = () => {
       // Submit form data to backend
       await axios.post(`${process.env.REACT_APP_BASE_URL}/profile`, formData, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'multipart/form-data',
-        },
+        }, 
       });
       alert('Profile updated successfully!');
     } catch (error) {
@@ -71,16 +71,16 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-300">
+    <div className="flex space-x-10 lg:space-x-30 items-center justify-center min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-300">
       {/* Profile Image */}
-      <div className="relative">
+      <div className="relative flex flex-col">
         <img
-          src={profileData.picture || 'https://via.placeholder.com/150'} 
+          src={profileData.picture || 'https://via.placeholder.com/250'} 
           alt="Profile"
-          className="rounded-full w-32 h-32 object-cover border-4 border-white"
+          className=" rounded-full w-64 h-64 object-cover border-4 border-white"
         />
         <button
-          className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-white text-purple-600 rounded-full px-4 py-2 mt-2"
+          className=" text-purple-600 rounded-full italic hover:underline"
           onClick={() => document.getElementById('file-input').click()}
         >
           Edit Picture
@@ -102,14 +102,30 @@ const Profile = () => {
           <input
             id="name"
             type="text"
+            disabled
+            value='Unchangeable'
+            onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg mt-1"
+          />
+        </div>
+        
+        
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-gray-700 font-semibold ">
+            Email
+          </label>
+          <input
+            id="name"
+            type="text"
             value={profileData.name}
             onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg mt-1"
           />
         </div>
+
         <div className="mb-4">
           <label htmlFor="email" className="block text-gray-700 font-semibold">
-            Email
+            Password
           </label>
           <input
             id="email"
