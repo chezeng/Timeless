@@ -356,3 +356,26 @@ def change_email():
     else:
         return Result.failure(400, 'Email is missing').get_response('Change The Email')
     return Result.success().get_response('Change The Email')
+
+@app.route('/delete_picture', method=['DELETE'])
+def delete_picture():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Delete Picture')
+    token = request.headers['token']
+    if 'video' in request.json:
+        videourl = request.json['video']
+        response = mongo.db.video.find_one({
+            'username' : token,
+            'url' : videourl
+        })
+        picurl = response.get('img_url')
+        musicurl = response.get('music_url')
+        mongo.db.video.delete_one ({
+            'user_id' : token,
+            'url' : videourl
+        })
+        mongo.db.image.delete_one ({
+            'url' : picurl
+        })
+    return Result.success().get_response('Removed The Picture From Portfolio')
