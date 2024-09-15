@@ -41,7 +41,7 @@ const Navbar = () => {
         <Link to="/" className="flex items-center space-x-2 group -ml-4 mr-4">
         <div className='hover:scale-105 ease-in-out transition duration-150 flex space-x-2'>
           <img src="/src/assets/logo.png" alt="Timeless logo" className="w-8 h-8" />
-          <p className="text-2xl font-bold text-purple-600 hover:text-purple-700">Timeless</p>
+          <p className="text-2xl font-bold italic text-purple-600 hover:text-purple-700">Timeless</p>
         </div>
         </Link>
         <div className="flex">
