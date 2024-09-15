@@ -156,27 +156,26 @@ const Generation = () => {
         </div>
         <div className="w-full md:w-2/3">
           <ImageGrid images={images} onSelect={handleImageSelect} selectedImage={selectedImage} />
-          <div className="mt-8 flex flex-row">
+          <div className="mt-8 flex flex-row space-x-3">
             <ThoughtInput setTime={setTime} setLocation={setLocation} setImages={setImages} />
-            <ActionButtons generateImages={generateImages} showMusic={generateMusic} /> {/* Pass music generation function */}
+            <ActionButtons generateImages={generateImages} showMusic={generateMusic} generateImagesWithDescription={generateImagesWithDescription} handleNext={handleNext} selectedImage={selectedImage}/> 
+            {/* {selectedImage && (
+              <div className='block space-y-4 w-1/4 text-sm md:text-md lg:text-lg'>
+                <button
+                    className="px-6 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0 shadow-md"
+                    onClick={generateImagesWithDescription}
+                >
+                  Regenerate!
+                </button>
+                <button
+                    onClick={handleNext}
+                    className="px-6 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0 shadow-md"
+                >
+                  Watch!
+                </button>
+              </div>
+            )} */}
           </div>
-          {/* selectedImage &&  */}
-          {(
-            <>
-              <button
-                  className="px-6 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0 shadow-md"
-                  onClick={generateImagesWithDescription}
-              >
-                Regenerate
-              </button>
-              <button
-                  onClick={handleNext}
-                  className="mt-4 px-6 rounded-full py-3 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition-all duration-300 ease-in-out"
-              >
-                Next
-              </button>
-            </>
-          )}
         </div>
       </div>
     </div>

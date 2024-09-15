@@ -3,9 +3,9 @@ import axios from 'axios';
 
 const Profile = () => {
   const [profileData, setProfileData] = useState({
-    email: 'http://10.37.117.49:5000/profile',
-    password: 'http://10.37.117.49:5000/profile',
-    picture: 'http://10.37.117.49:5000/profile', // Profile picture URL
+    email: 'http://10.37.117.49:5000/profile/email',
+    password: 'http://10.37.117.49:5000/profile/password',
+    picture: 'http://10.37.117.49:5000/profile/picture', // Profile picture URL
   });
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -75,7 +75,7 @@ const Profile = () => {
       {/* Profile Image */}
       <div className="relative flex flex-col">
         <img
-          src={profileData.picture || 'https://via.placeholder.com/250'} 
+          src={profileData.picture || 'src/assets/logo.png'} 
           alt="Profile"
           className=" rounded-full w-64 h-64 object-cover border-4 border-white"
         />

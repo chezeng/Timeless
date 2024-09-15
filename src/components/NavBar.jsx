@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 
 const Navbar = () => {
   const location = useLocation();
-  const navItems = ['Home', 'Generation', 'Portfolio', 'Community'];
+  const navItems = ['Generation', 'Portfolio', 'Community'];
   const [visible, setVisible] = useState(true);
   const [y, setY] = useState(window.scrollY);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Simulating login state
