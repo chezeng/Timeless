@@ -74,7 +74,7 @@ const HomePage = () => {
       </div>
       <button
         onClick={handleDreamClick}
-        className="px-8 py-3 font-bold bg-gradient-to-br from-pink-200 border-2 hover:bg-white via-purple-300 to-blue-200 text-white rounded-full text-xl transition duration-300 ease-in-out transform hover:scale-105"
+        className="px-8 py-3 rounded-lg font-bold bg-gradient-to-br from-pink-200 border-2 hover:bg-white via-purple-300 to-blue-200 text-white text-xl transition duration-300 ease-in-out transform hover:scale-105"
       >
         Let's Dream!
       </button>

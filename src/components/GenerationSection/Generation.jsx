@@ -122,7 +122,7 @@ const Generation = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-200 p-10 md:h-screen h-full pt-24">
+    <div className="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-200 p-10 md:h-screen h-full pt-40">
       {isLoadingVideo && (  // Fullscreen loading spinner for video
         <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
           <CircularProgress size={80} />

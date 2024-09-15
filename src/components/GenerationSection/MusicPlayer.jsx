@@ -51,8 +51,8 @@ const MusicPlayer = ({ musicData, isLoading }) => {
           <div className="w-full h-full bg-purple-400"></div> // Placeholder
         )}
       </div>
-      <h2 className="text-xl font-semibold mb-2">{musicData?.title || 'Title'}</h2>
-      <div className="mb-4 bg-purple-100 rounded-full h-2 overflow-hidden">
+      <h2 className="text-xl font-semibold mb-2 ml-2 text-purple-600">{musicData?.title || 'Ready for a cool song?'}</h2>
+      <div className="mb-4 bg-purple-100 rounded-full h-1 overflow-hidden">
         <div className="progress-bar-fill bg-purple-500 h-full w-0 transition-all duration-300 ease-in-out"></div>
       </div>
       <button 
