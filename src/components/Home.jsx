@@ -72,22 +72,12 @@ const HomePage = () => {
           }}
         /></span>
       </div>
-        {/* <button
-          onClick={handleDreamClick}
-          className="px-8 py-3 font-bold bg-gradient-to-br from-pink-200 border-2 hover:bg-white via-purple-300 to-blue-200 text-white rounded-full text-xl transition duration-300 ease-in-out transform hover:scale-105">
-          Let's Dream!
-      </button> */}
-       <div class="relative group cursor-pointer">
-          <div
-            class="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-500 group-hover:duration-200">
-          </div>
-          <div
-            class="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-6">
-            <div class="space-y-2">
-              <p class="text-slate-800">Let's Dream!</p>
-            </div>
-          </div>
-        </div>
+      <button
+        onClick={handleDreamClick}
+        className="px-8 py-3 font-bold bg-gradient-to-br from-pink-200 border-2 hover:bg-white via-purple-300 to-blue-200 text-white rounded-full text-xl transition duration-300 ease-in-out transform hover:scale-105"
+      >
+        Let's Dream!
+      </button>
     </div>
   );
 };

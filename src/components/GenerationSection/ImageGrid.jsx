@@ -13,7 +13,7 @@ const ImageGrid = ({ images, onSelect, selectedImage }) => {
         >
           {image && (
             <img 
-              src={image} 
+              src={image.imageUrl}
               alt={`Generated ${index}`} 
               className="w-full h-full object-cover rounded-lg cursor-pointer"
             />

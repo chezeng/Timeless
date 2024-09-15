@@ -53,8 +53,8 @@ def generate_image():
         description = request.json['description']
     else:
         description = ''
-    if 'token' in request.json:
-        username = request.json['token']
+    if 'token' in request.headers:
+        username = request.headers['token']
     else:
         return Result.failure(400, 'Creator is missing').get_response('Image Generation')
     image_prompt = 'Location: ' + location + ', Time: ' + time
@@ -272,6 +272,17 @@ def get_user_portfolio():
     })
     for item in result:
         images.append(item.get('url'))
+    return images
+
+@app.route('/title', method = ['GET'])
+def get_picture_title():
+    url = request.headers['token']
+    result = mongo.db.image.find({
+        'url': url
+    })
+    title = result.get('time') + " " + result.get('location')
+    return title
+
 
 @app.route('/user_email', methods=['GET'])
 def get_user_email():
@@ -288,4 +299,6 @@ def get_user_password():
         'user_id' : token
     })
     return result.get('password')
+
+
 
