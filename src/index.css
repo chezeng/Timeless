@@ -17,6 +17,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.anim_gradient {
+  background: linear-gradient(180deg, #A9C9FF 0%, #FFBBEC 100%);
+          background-size: 400% 400%;
+          animation : "gradient 25s ease infinite";
+      }
+        
+  @keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  };
 
 
 

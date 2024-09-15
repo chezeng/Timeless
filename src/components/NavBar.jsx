@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 
 const Navbar = () => {
   const location = useLocation();
@@ -27,14 +27,11 @@ const Navbar = () => {
     };
   }, [y]);
 
-  // Simulating a login check
   useEffect(() => {
-    // Replace this with your actual authentication check
     const checkLoginStatus = () => {
       const userId = localStorage.getItem('userId');
       setIsLoggedIn(!!userId);
     };
-
     checkLoginStatus();
   }, []);
 
@@ -42,8 +39,10 @@ const Navbar = () => {
     <nav className={`fixed z-10 w-full shadow-md py-4 bg-white transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2 group -ml-4 mr-4">
+        <div className='hover:scale-105 ease-in-out transition duration-150 flex space-x-2'>
           <img src="/src/assets/logo.png" alt="Timeless logo" className="w-8 h-8" />
-          <p className="text-2xl font-bold text-purple-600 group-hover:text-purple-700 transition-colors duration-300">Timeless</p>
+          <p className="text-2xl font-bold text-purple-600 hover:text-purple-700">Timeless</p>
+        </div>
         </Link>
         <div className="flex">
           {navItems.map((item) => {
@@ -79,7 +78,7 @@ const Navbar = () => {
               <span>Profile</span>
             </Link>
               <Button
-                  className="px-4 py-2 rounded-md text-sm font-medium text-purple-600 border border-purple-600 hover:bg-purple-50 transition-all transform hover:-translate-y-0.5"
+                  className="px-4 py-2 rounded-md text-sm font-medium text-purple-600 border border-purple-600 hover:bg-purple-50 transition-all transform "
                   onClick={() => {localStorage.clear(); window.location.reload();}}>Logout</Button>
                 </>
           ) : (

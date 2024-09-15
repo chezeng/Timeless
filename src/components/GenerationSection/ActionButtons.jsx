@@ -7,13 +7,13 @@ const ActionButtons = ({ generateImages, showMusic }) => {
         className="px-6 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0 shadow-md"
         onClick={showMusic} // Trigger the music player display
       >
-        Show Music
+        Let's Listen!
       </button>
       <button 
         className="px-6 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0 shadow-md"
         onClick={generateImages}
       >
-        Let's Dream!
+        Let's Imagine!
       </button>
     </div>
   );

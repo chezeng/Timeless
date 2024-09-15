@@ -110,7 +110,7 @@ const Generation = () => {
   };
 
   return (
-    <div className="p-10 md:h-screen h-full pt-24">
+    <div className="bg-gradient-to-br from-pink-100 via-purple-200 to-blue-300 p-10 md:h-screen h-full pt-24">
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/3">
           <MusicPlayer musicData={musicData} />
@@ -126,7 +126,7 @@ const Generation = () => {
               onClick={handleNext}
               className="mt-4 px-6 py-3 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition-all duration-300 ease-in-out"
             >
-              Next
+              Let's Relive!
             </button>
           )}
         </div>

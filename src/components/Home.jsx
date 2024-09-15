@@ -8,16 +8,13 @@ const HomePage = () => {
   const titleRef = useRef(null);
 
   const titles = [
-    "1980s New York Midtown",
-    "2010s Tokyo Tower",
-    "1900s London Big Ben",
-    "1500s China Forbidden City",
-    "1100s Europe Medieval Age",
-    "100s Roman Empire",
+    "1960s America Woodstock","1970s Vietnam War","1920s Paris Jazz Age","1940s Europe World War II","1990s Seattle Grunge",'2000s "Y2K" Millennium',"2020s Global Pandemic",
+    "2050s Mars Colony","1800s America Wild West","1700s Europe Enlightenment","1600s Japan Edo Period","1400s Italy Renaissance","1200s Middle East Crusades", "900s Vikings Age",
+    "1980s New York Midtown","2010s Tokyo Tower","1900s London Big Ben","1500s China Forbidden City","1100s Europe Medieval Age",
+    "100s Roman Empire","3000s Mars Colony","5000s Earth Orbit","8000s Andromeda Galaxy", "10000s Milky Way Galaxy", "100000s Universe Big Bang"
   ];
 
   useEffect(() => {
-
     // Simulating API check for user login status
     checkLoginStatus();
 
@@ -45,8 +42,8 @@ const HomePage = () => {
 
   const handleDreamClick = () => {
     if (isLoggedIn) {
-      // Navigate to dream page
-      navigate('/dream');
+      // Navigate to generation page
+      navigate('/generation');
     } else {
       // Navigate to login page
       navigate('/login');
@@ -75,12 +72,22 @@ const HomePage = () => {
           }}
         /></span>
       </div>
-      <button
-        onClick={handleDreamClick}
-        className="px-8 py-3 font-bold bg-gradient-to-br from-pink-200 border-2 hover:bg-white via-purple-300 to-blue-200 text-white rounded-full text-xl transition duration-300 ease-in-out transform hover:scale-105"
-      >
-        Let's Dream!
-      </button>
+        {/* <button
+          onClick={handleDreamClick}
+          className="px-8 py-3 font-bold bg-gradient-to-br from-pink-200 border-2 hover:bg-white via-purple-300 to-blue-200 text-white rounded-full text-xl transition duration-300 ease-in-out transform hover:scale-105">
+          Let's Dream!
+      </button> */}
+       <div class="relative group cursor-pointer">
+          <div
+            class="absolute -inset-1 bg-gradient-to-r from-red-600 to-violet-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-500 group-hover:duration-200">
+          </div>
+          <div
+            class="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-6">
+            <div class="space-y-2">
+              <p class="text-slate-800">Let's Dream!</p>
+            </div>
+          </div>
+        </div>
     </div>
   );
 };
