@@ -24,16 +24,16 @@ const Generation = () => {
     try {
       const imageRequests = [...Array(4)].map(async () => {
         const response = await axios.post(`${config.base_url}/generate_image`, {
-          time,
-          location
+          time: time,
+          location: location
         }, {
           headers: {
-            token: config.token
+            token: localStorage.getItem('userId')
           }
         });
 
         if (response.data.ok) {
-          return response.data.data.imageUrl;
+          return response.data.data;
         } else {
           console.error("Image generation failed:", response.data.message);
           return null;
@@ -41,8 +41,47 @@ const Generation = () => {
       });
 
       // Get all image URLs
-      const imageUrls = await Promise.all(imageRequests);
-      setImages(imageUrls.filter(url => url !== null));
+      const imageGenerated = await Promise.all(imageRequests);
+      setImages(imageGenerated.filter(url => url.imageUrl !== null));
+    } catch (error) {
+      console.error("Error generating images:", error);
+    }
+  };
+
+  const generateImagesWithDescription = async () => {
+    if (!selectedImage) {
+      alert('Please select an image before proceeding.');
+      return;
+    }
+
+    if (!time || !location) {
+      alert('Please provide both time and location to generate images!');
+      return;
+    }
+
+    try {
+      const imageRequests = [...Array(4)].map(async () => {
+        const response = await axios.post(`${config.base_url}/generate_image`, {
+          time: time,
+          location: location,
+          description: selectedImage.summarizedPrompt
+        }, {
+          headers: {
+            token: localStorage.getItem('userId')
+          }
+        });
+
+        if (response.data.ok) {
+          return response.data.data;
+        } else {
+          console.error("Image generation failed:", response.data.message);
+          return null;
+        }
+      });
+
+      // Get all image URLs
+      const imageGenerated = await Promise.all(imageRequests);
+      setImages(imageGenerated.filter(image => image.imageUrl !== null));
     } catch (error) {
       console.error("Error generating images:", error);
     }
@@ -88,14 +127,14 @@ const Generation = () => {
     try {
       const response = await axios.post(`${config.base_url}/generate_video`, {
         prompt: `${time} ${location}`,
-        imageUrl: selectedImage
+        imageUrl: selectedImage.imageUrl
       }, {
         headers: { token: config.token }
       });
 
       if (response.data.ok) {
-        navigate('/videodisplay', { 
-          state: { 
+        navigate('/videodisplay', {
+          state: {
             videoUrl: response.data.data,
             prompt: `${time} ${location}`,
             musicData: musicData
@@ -113,21 +152,29 @@ const Generation = () => {
     <div className="p-10 md:h-screen h-full pt-24">
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/3">
-          <MusicPlayer musicData={musicData} />
+          <MusicPlayer musicData={musicData} /> {/* Pass music data */}
         </div>
         <div className="w-full md:w-2/3">
           <ImageGrid images={images} onSelect={handleImageSelect} selectedImage={selectedImage} />
           <div className="mt-8 flex flex-row">
             <ThoughtInput setTime={setTime} setLocation={setLocation} setImages={setImages} />
-            <ActionButtons generateImages={generateImages} showMusic={generateMusic} />
+            <ActionButtons generateImages={generateImages} showMusic={generateMusic} /> {/* Pass music generation function */}
           </div>
           {selectedImage && (
-            <button 
-              onClick={handleNext}
-              className="mt-4 px-6 py-3 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition-all duration-300 ease-in-out"
-            >
-              Next
-            </button>
+              <>
+                <button
+                    className="px-6 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 transition duration-150 ease-in-out transform hover:-translate-y-1 active:translate-y-0 shadow-md"
+                    onClick={generateImagesWithDescription}
+                >
+                  Regenerate
+                </button>
+                <button
+                    onClick={handleNext}
+                    className="mt-4 px-6 py-3 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition-all duration-300 ease-in-out"
+                >
+                  Next
+                </button>
+              </>
           )}
         </div>
       </div>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import './login.css';
 import logo from '../../timeless-logo-no-words.png';
+import axios from "axios";
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
@@ -19,19 +20,17 @@ const LoginForm = () => {
 
         try {
             // Send the POST request to Flask API
-            const response = await fetch('http://10.37.117.49:5000/login', {
-                method: 'POST',
+            const response = await axios.post('http://10.37.117.49:5000/login', payload,{
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload), // Send the payload as JSON
             });
-
-            if (response.ok) {
-                const data = await response.json();
+            await console.log(response);
+            if (response.data.ok) {
+                const data = await response.data.data;
                 console.log('Login successful:', data);
 
-                localStorage.setItem('userId', data.userId);
+                localStorage.setItem('userId', data.username);
 
                 // Redirect to /home after signup success
                 navigate('/');

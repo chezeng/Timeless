@@ -53,8 +53,8 @@ def generate_image():
         description = request.json['description']
     else:
         description = ''
-    if 'token' in request.json:
-        username = request.json['token']
+    if 'token' in request.headers:
+        username = request.headers['token']
     else:
         return Result.failure(400, 'Creator is missing').get_response('Image Generation')
     image_prompt = 'Location: ' + location + ', Time: ' + time
