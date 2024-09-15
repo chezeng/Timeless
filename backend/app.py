@@ -305,7 +305,7 @@ def get_user_email():
         return token_verification.get_response('Get User Email')
     token = request.headers['token']
     result = mongo.db.users.find_one({
-        'user_id': token
+        'username': token
     })
     return Result.success({"email": result.get('email')}).get_response('Get User Email')
 
@@ -317,7 +317,7 @@ def get_user_password():
         return token_verification.get_response('Get User Password')
     token = request.headers['token']
     result = mongo.db.users.find_one({
-        'user_id': token
+        'username': token
     })
     return Result.success({"password": result.get('password')}).get_response('Get User Password')
 
