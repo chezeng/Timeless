@@ -53,7 +53,7 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="portfolio-container">
+    <div className="portfolio-container h-screen">
       <div className="portfolio-header">
         <button onClick={() => setActiveSection("video")}>
           <Video /> Videos
