@@ -320,3 +320,28 @@ def get_user_password():
         'user_id': token
     })
     return Result.success({"password": result.get('password')}).get_response('Get User Password')
+
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Change The Password')
+    token = request.headers['token']
+    if 'password' in request.json:
+        newpassword = request.json['password']
+        mongo.db.users.update_one({
+            'username': token
+        }, {'$set': {'password': newpassword}})
+
+@app.route('/change_email', methods=['POST'])
+def change_password():
+    token_verification = verify_token(request.headers.get('token'))
+    if not token_verification.success:
+        return token_verification.get_response('Change The Email')
+    token = request.headers['token']
+    if 'email' in request.json:
+        newemail = request.json['email']
+        mongo.db.users.update_one({
+            'username': token
+        }, {'$set': {'email': newemail}})
+
