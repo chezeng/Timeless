@@ -29,7 +29,7 @@ const Portfolio = () => {
   const filterItems = () => {
     switch (activeSection) {
       case "liked":
-        return items.filter(item => item.is_liked);
+        return items.filter(item => item.liked === 1);
       case "shared":
         return items.filter(item => item.is_shared);
       default:
@@ -90,7 +90,6 @@ const Portfolio = () => {
           <PortfolioItem
             key={item.id}
             id={item.id}
-            title={item.title}
             image={item.imageUrl}
             video={item.url}
             music={item.musicUrl}

@@ -26,8 +26,8 @@ const PortfolioItem = ({ id, title, description, image, video, music, liked, isS
   };
 
   return (
-    <div className="portfolio-item relative bg-white rounded-lg shadow-md p-4 m-2">
-      <img src={image} alt={description} className="w-full h-48 object-cover rounded-md mb-4" />
+    <div className="flex portfolio-item h-fit relative bg-white rounded-lg shadow-md p-4 m-2">
+      <img src={image} alt={description} className="w-fit h-48 object-cover rounded-md mb-4" />
       <div className="item-content">
         <h3 className="text-xl font-bold mb-2">{title}</h3>
         <p className="text-gray-600 mb-4">{description}</p>
