@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ImageGrid from './ImageGrid';
 import MusicPlayer from './MusicPlayer';
 import ThoughtInput from './ThoughtInput';
 import ActionButtons from './ActionButtons';
 import axios from 'axios';
-import config from '../../apiConfig.json'; // Assuming base_url and token are stored here
+import config from '../../apiConfig.json';
 
 const Generation = () => {
   const [images, setImages] = useState([]);
   const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
-  const [musicData, setMusicData] = useState(null); // State for music data
+  const [musicData, setMusicData] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const navigate = useNavigate();
 
   const generateImages = async () => {
     if (!time || !location) {
@@ -72,18 +75,60 @@ const Generation = () => {
     }
   };
 
+  const handleImageSelect = (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const handleNext = async () => {
+    if (!selectedImage) {
+      alert('Please select an image before proceeding.');
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${config.base_url}/generate_video`, {
+        prompt: `${time} ${location}`,
+        imageUrl: selectedImage
+      }, {
+        headers: { token: config.token }
+      });
+
+      if (response.data.ok) {
+        navigate('/videodisplay', { 
+          state: { 
+            videoUrl: response.data.data,
+            prompt: `${time} ${location}`,
+            musicData: musicData
+          }
+        });
+      } else {
+        console.error("Video generation failed:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error generating video:", error);
+    }
+  };
+
   return (
     <div className="p-10 md:h-screen h-full pt-24">
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/3">
-          <MusicPlayer musicData={musicData} /> {/* Pass music data */}
+          <MusicPlayer musicData={musicData} />
         </div>
         <div className="w-full md:w-2/3">
-          <ImageGrid images={images} />
+          <ImageGrid images={images} onSelect={handleImageSelect} selectedImage={selectedImage} />
           <div className="mt-8 flex flex-row">
             <ThoughtInput setTime={setTime} setLocation={setLocation} setImages={setImages} />
-            <ActionButtons generateImages={generateImages} showMusic={generateMusic} /> {/* Pass music generation function */}
+            <ActionButtons generateImages={generateImages} showMusic={generateMusic} />
           </div>
+          {selectedImage && (
+            <button 
+              onClick={handleNext}
+              className="mt-4 px-6 py-3 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition-all duration-300 ease-in-out"
+            >
+              Next
+            </button>
+          )}
         </div>
       </div>
     </div>

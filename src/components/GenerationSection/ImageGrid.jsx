@@ -1,7 +1,6 @@
 import React from 'react';
 
-const ImageGrid = ({ images }) => {
-  // Create an array of 4 items, filling with images or empty strings
+const ImageGrid = ({ images, onSelect, selectedImage }) => {
   const gridImages = [...images, ...Array(4 - images.length).fill('')];
 
   return (
@@ -9,13 +8,14 @@ const ImageGrid = ({ images }) => {
       {gridImages.map((image, index) => (
         <div 
           key={index}
-          className="aspect-square bg-purple-300 rounded-lg shadow-md transition duration-300 ease-in-out hover:shadow-lg hover:scale-105"
+          className={`aspect-square bg-purple-300 rounded-lg shadow-md transition duration-300 ease-in-out hover:shadow-lg hover:scale-105 ${image === selectedImage ? 'ring-4 ring-purple-600' : ''}`}
+          onClick={() => image && onSelect(image)}
         >
           {image && (
             <img 
               src={image} 
               alt={`Generated ${index}`} 
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-full object-cover rounded-lg cursor-pointer"
             />
           )}
         </div>
