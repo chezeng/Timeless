@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause } from 'lucide-react';
+import CircularProgress from '@mui/material/CircularProgress';  // Import MUI CircularProgress
 
-const MusicPlayer = ({ musicData }) => {
+const MusicPlayer = ({ musicData, isLoading }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef('/assets/Color.mp3');
 
@@ -40,7 +41,11 @@ const MusicPlayer = ({ musicData }) => {
   return (
     <div className="bg-purple-200 rounded-lg p-6 shadow-md max-w-sm mx-auto">
       <div className="aspect-square bg-purple-300 rounded-lg mb-4 overflow-hidden">
-        {musicData ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <CircularProgress />
+          </div>
+        ) : musicData ? (
           <img src={musicData.image_url} alt="Album cover" className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full bg-purple-400"></div> // Placeholder
@@ -50,10 +55,6 @@ const MusicPlayer = ({ musicData }) => {
       <div className="mb-4 bg-purple-100 rounded-full h-2 overflow-hidden">
         <div className="progress-bar-fill bg-purple-500 h-full w-0 transition-all duration-300 ease-in-out"></div>
       </div>
-      {/* <div className="flex justify-between text-sm text-purple-700 mb-4">
-        <span className="current-time">00:00</span>
-        <span className="time">{formatTime(audioRef.current?.duration || 0)}</span>
-      </div> */}
       <button 
         className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition duration-300 ease-in-out mx-auto"
         onClick={handlePlayPause}

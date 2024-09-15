@@ -119,7 +119,7 @@ const Profile = () => {
             type="text"
             value={profileData.name}
             onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg mt-1"
+            className="w-full px-3 py-2 border bg-white text-black border-gray-300 rounded-lg mt-1"
           />
         </div>
 
@@ -132,7 +132,7 @@ const Profile = () => {
             type="email"
             value={profileData.email}
             onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg mt-1"
+            className="w-full px-3 py-2 border bg-white text-black border-gray-300 rounded-lg mt-1"
           />
         </div>
         <button

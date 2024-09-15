@@ -1,6 +1,7 @@
 import React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';  // Import MUI CircularProgress
 
-const ImageGrid = ({ images, onSelect, selectedImage }) => {
+const ImageGrid = ({ images, onSelect, selectedImage, isLoading }) => {
   const gridImages = [...images, ...Array(4 - images.length).fill('')];
 
   return (
@@ -11,13 +12,17 @@ const ImageGrid = ({ images, onSelect, selectedImage }) => {
           className={`aspect-square bg-purple-300 rounded-lg shadow-md transition duration-300 ease-in-out hover:shadow-lg hover:scale-105 ${image === selectedImage ? 'ring-4 ring-purple-600' : ''}`}
           onClick={() => image && onSelect(image)}
         >
-          {image && (
+          {isLoading ? (  // Show loading spinner when isLoading is true
+            <div className="flex items-center justify-center h-full">
+              <CircularProgress />
+            </div>
+          ) : image ? (
             <img 
               src={image.imageUrl}
               alt={`Generated ${index}`} 
               className="w-full h-full object-cover rounded-lg cursor-pointer"
             />
-          )}
+          ) : null}
         </div>
       ))}
     </div>
