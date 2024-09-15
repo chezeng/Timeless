@@ -37,12 +37,14 @@ const VideoDisplay = () => {
   };
 
   const handleLike = () => {
-    navigate('/portfolio/liked');
+    navigate('/portfolio');
   };
 
   const handleSave = () => {
-    setShowNotification(true);
-    setTimeout(() => setShowNotification(false), 3000);
+    const link = document.createElement("a");
+    link.href = videoUrl;
+    link.download = "dream_video.mp4";
+    link.click();
   };
 
   const handleShare = () => {

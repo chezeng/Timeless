@@ -38,25 +38,25 @@ const Portfolio = () => {
   };
 
   const handleLike = async (id) => {
-    const updatedItems = items.map(item => 
-      item.id === id ? { ...item, is_liked: !item.is_liked } : item
-    );
-    setItems(updatedItems);
-    // TODO: Implement API call to update like status
+    const response = await axios.post(`${config.base_url}like_video`, {
+        videoId: id
+        }, {
+        headers: { token: localStorage.getItem('userId') }
+        });
+    if (response.data.ok) window.location.reload();
   };
 
-  const handleShare = async (id) => {
-    const updatedItems = items.map(item => 
-      item.id === id ? { ...item, is_shared: !item.is_shared } : item
-    );
-    setItems(updatedItems);
-    // TODO: Implement API call to update share status
+  const handleShare = async (url) => {
+    window.open(url, '_blank').focus();
   };
 
-  const handleDelete = async (id) => {
-    const updatedItems = items.filter(item => item.id !== id);
-    setItems(updatedItems);
-    // TODO: Implement API call to delete item
+  const handleDelete = async (url) => {
+    const response = await axios.post(`${config.base_url}delete_picture`, {
+      video: url
+    }, {
+      headers: { token: localStorage.getItem('userId') }
+    });
+    if (response.data.ok) window.location.reload();
   };
 
   return (
@@ -91,15 +91,14 @@ const Portfolio = () => {
             key={item.id}
             id={item.id}
             title={item.title}
-            description={item.description}
             image={item.imageUrl}
             video={item.url}
             music={item.musicUrl}
-            isLiked={item.is_liked}
-            isShared={item.is_shared}
-            onLike={handleLike}
-            onShare={handleShare}
-            onDelete={handleDelete}
+            description={item.prompt}
+            liked={item.liked}
+            onLike={() => {item.liked = 1 - item.liked; console.log(item.liked); handleLike(item.id);}}
+            onShare={() => handleShare(item.imageUrl)}
+            onDelete={() => handleDelete(item.url)}
           />
         ))}
       </div>

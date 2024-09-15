@@ -29,7 +29,7 @@ const LoginForm = () => {
             if (response.data.ok) {
                 const data = await response.data.data;
                 console.log('Login successful:', data);
-
+                localStorage.setItem('avatar', data.picture);
                 localStorage.setItem('userId', data.username);
 
                 // Redirect to /home after signup success

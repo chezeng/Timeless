@@ -74,7 +74,7 @@ const Navbar = () => {
               to="/profile"
               className="flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 hover:shadow-lg"
             >
-              <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+              <div className="w-8 h-8 bg-gray-300 rounded-full"><img src={localStorage.getItem('avatar')}/></div>
               <span>{localStorage.getItem('userId')}</span>
             </Link>
               <Button

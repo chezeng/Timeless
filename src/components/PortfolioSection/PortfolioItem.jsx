@@ -4,7 +4,7 @@ import { Heart, Share2, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const PortfolioItem = ({ id, title, description, image, video, music, isLiked, isShared, onLike, onShare, onDelete }) => {
+const PortfolioItem = ({ id, title, description, image, video, music, liked, isShared, onLike, onShare, onDelete }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const PortfolioItem = ({ id, title, description, image, video, music, isLiked, i
           <motion.button 
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className={`action-button p-2 rounded-full ${isLiked ? 'bg-red-500 text-white' : 'bg-gray-200'}`} 
+            className={`action-button p-2 rounded-full ${liked === 1 ? 'bg-red-500 text-white' : 'bg-gray-200'}`} 
             onClick={handleLike}
           >
             <Heart />
@@ -64,15 +64,14 @@ const PortfolioItem = ({ id, title, description, image, video, music, isLiked, i
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="open-button mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
-        onClick={() => {
-          navigate('/videodisplay', {
-            state: {
-              videoUrl: video,
-              prompt: ``,
-              musicData: music
-            }
-          });
-        }}
+        onClick={()=>{navigate('/videodisplay', {
+          state: {
+            videoUrl: video,
+            prompt: description,
+            musicData: music,
+            title: title
+          }
+        });}}
       >
         View
       </motion.button>
