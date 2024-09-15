@@ -1,17 +1,46 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Heart, Save, Share2 } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Heart, Save, Share2, Play, Pause } from 'lucide-react';
 
 const VideoDisplay = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { videoUrl, prompt, musicData } = location.state || {};
   const [showNotification, setShowNotification] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (musicData && audioRef.current) {
+      audioRef.current.src = musicData.audio_url;
+      audioRef.current.loop = true; // Loop the audio
+    }
+    
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.4; // Set playback rate to 0.4x
+      videoRef.current.loop = true; // Enable looping for the video
+    }
+  }, [musicData]);
+
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+        audioRef.current.pause();
+      } else {
+        videoRef.current.play();
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   const handleLike = () => {
     navigate('/portfolio/liked');
   };
 
   const handleSave = () => {
-    // Implement save functionality here
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 3000);
   };
@@ -28,18 +57,22 @@ const VideoDisplay = () => {
         </div>
       )}
       
-      <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden">
-        <div className="aspect-w-16 aspect-h-9 bg-purple-200">
-          {/* Placeholder for video - replace with actual video component */}
-          <div className="flex items-center justify-center text-purple-600">
-            Video will be displayed here
-          </div>
+      <div className="w-1/2 lg:w-1/3 max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden">   
+        <div className="aspect-w-16 aspect-h-9 bg-purple-200 relative">
+          <video 
+            ref={videoRef} 
+            src={videoUrl} 
+            className="w-full h-full object-cover" 
+          />
+          <button 
+            onClick={handlePlayPause}
+            className="absolute inset-0 m-auto w-16 h-16 bg-white bg-opacity-50 rounded-full flex items-center justify-center"
+          >
+            {isPlaying ? <Pause size={32} /> : <Play size={32} />}
+          </button>
         </div>
         <div className="p-6">
-          <p className="text-gray-600 text-center">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-            aliqua. Ut enim ad minim veniam, quis nostrud exercitation...
-          </p>
+          <p className="text-gray-600 text-center">{prompt}</p>
         </div>
       </div>
       
@@ -79,6 +112,7 @@ const VideoDisplay = () => {
           </button>
         </div>
       </div>
+      <audio ref={audioRef} />
     </div>
   );
 };
